@@ -42,6 +42,9 @@ export default async function getReservations(params: IParams) {
          listing: {
             ...reservation.listing,
             createdAt: reservation.listing.createdAt.toISOString(),
+            updatedAt: reservation.listing.updatedAt.toISOString(),
+            vehicleAttributes: reservation.listing.vehicleAttributes as any,
+            propertyAttributes: reservation.listing.propertyAttributes as any,
          },
       }));
 

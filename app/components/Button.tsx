@@ -9,6 +9,7 @@ interface ButtonProps {
    outline?: boolean;
    small?: boolean;
    icon?: IconType;
+   className?: string;
 }
 const Button: React.FC<ButtonProps> = ({
    label,
@@ -17,6 +18,7 @@ const Button: React.FC<ButtonProps> = ({
    outline,
    small,
    icon: Icon,
+   className = "",
 }) => {
    return (
       <button
@@ -26,16 +28,23 @@ const Button: React.FC<ButtonProps> = ({
     relative
     disabled:opacity-70
     disabled:cursor-not-allowed
-    rounded-lg
-    hover:opacity-80
-    transition
+    rounded-xl
+    font-semibold
+    overflow-hidden
+    group
     w-full
-    ${outline ? "bg-white border-black text-black" : "bg-rose-500 border-rose-500 text-white"}
-    ${small ? "py-1 text-sm font-light border-[1px]" : "py-3 text-md font-semibold border-2"}
+    ${outline 
+      ? "bg-white border-2 border-gray-300 text-gray-700 hover:border-purple-500 hover:text-purple-600 hover:shadow-lg" 
+      : "btn-gradient text-white border-0 shadow-lg hover:shadow-xl"
+    }
+    ${small ? "py-2 px-4 text-sm" : "py-3 px-6 text-md"}
+    ${className}
    `}
       >
-         {label}
-         {Icon && <Icon size={24} className="absolute right-4 top-3" />}
+         <span className="relative z-10 flex items-center justify-center gap-2">
+            {label}
+            {Icon && <Icon size={small ? 16 : 20} />}
+         </span>
       </button>
    );
 };

@@ -1,9 +1,7 @@
 "use client";
 
 import Container from "../Container";
-import Categories from "./Categories";
 import Logo from "./Logo";
-import Search from "./Search";
 import UserMenu from "./UserMenu";
 import { SafeUser } from "@/app/types";
 
@@ -15,17 +13,15 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
    console.log({ currentUser });
 
    return (
-      <div className="fixed w-full bg-white z-10 shadow-sm">
-         <div className="py-4 border-b-[1px]">
+      <div className="fixed w-full bg-white/95 backdrop-blur-md z-10 shadow-lg border-b border-gray-100">
+         <div className="py-4">
             <Container>
-               <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
+               <div className="flex flex-row items-center justify-between gap-3 md:gap-0 fade-in">
                   <Logo />
-                  <Search />
                   <UserMenu currentUser={currentUser} />
                </div>
             </Container>
          </div>
-         <Categories />
       </div>
    );
 };

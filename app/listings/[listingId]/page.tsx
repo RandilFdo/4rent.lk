@@ -4,6 +4,7 @@ import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
 import ListingClient from "./ListingClient";
 import getReservations from "@/app/actions/getReservation";
+import { redirect } from "next/navigation";
 interface IParams {
    listingId?: string;
 }
@@ -19,6 +20,11 @@ const ListingPage = async ({ params }: { params: IParams }) => {
             <EmptyState />
          </ClientOnly>
       );
+   }
+
+   // Require login to view listing details
+   if (!currentUser) {
+      redirect('/');
    }
 
    return (

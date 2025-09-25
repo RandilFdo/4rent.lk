@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import EmptyState from "../components/EmptyState";
 import ClientOnly from "../components/ClientOnly";
 import getCurrentUser from "../actions/getCurrentUser";
@@ -8,14 +9,22 @@ const ReservationsPage = async () => {
    const currentUser = await getCurrentUser();
 
    if (!currentUser) {
-      <ClientOnly>
-         <EmptyState title="Unauthorized" subTitle="Pleaae login" />
-      </ClientOnly>;
+      return (
+         <ClientOnly>
+            <EmptyState title="Unauthorized" subTitle="Please login" />
+         </ClientOnly>
+      );
    }
 
-   const reservations = await getReservations({
-      authorId: currentUser?.id,
-   });
+   let reservations: any[] = [];
+   try {
+      reservations = await getReservations({
+         authorId: currentUser?.id,
+      });
+   } catch (error) {
+      console.error('Error fetching reservations:', error);
+      reservations = [];
+   }
 
    if (reservations.length === 0) {
       return (

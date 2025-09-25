@@ -59,11 +59,14 @@ const LoginModal = () => {
    }, [loginModal, registerModal]);
 
    const bodyContent = (
-      <div className="flex flex-col gap-2">
-         <Heading title="Welcome back" subtitle="Login to your account" center />
+      <div className="flex flex-col gap-4">
+         <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to 4Rent</h2>
+            <p className="text-gray-600">Sign in to your account to continue</p>
+         </div>
          <Input
             id="email"
-            label="Email"
+            label="Email Address"
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -82,8 +85,15 @@ const LoginModal = () => {
    );
 
    const footerContent = (
-      <div className="flex flex-col gap-4 mt-3">
-         <hr />
+      <div className="flex flex-col gap-4 mt-6">
+         <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+               <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+               <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            </div>
+         </div>
          <Button
             outline
             label="Continue with Google"
@@ -96,13 +106,14 @@ const LoginModal = () => {
             icon={AiFillGithub}
             onClick={() => signIn("github")}
          />
-         <div className="text-neutral-500 text-center mt-4 font-light">
-            <div className="flex flex-row items-center gap-2 justify-center">
-               <div>First time using Airbnb?</div>
-               <div className="text-neutral-800 cursor-pointer hover:underline" onClick={onToggle}>
-                  Create an Account
-               </div>
-            </div>
+         <div className="text-center mt-4">
+            <span className="text-gray-600">Don't have an account? </span>
+            <button
+               className="text-blue-600 hover:text-blue-500 font-medium"
+               onClick={onToggle}
+            >
+               Sign up for 4Rent
+            </button>
          </div>
       </div>
    );
@@ -111,8 +122,8 @@ const LoginModal = () => {
       <Modal
          disabled={isLoading}
          isOpen={loginModal.isOpen}
-         title="Login"
-         actionLabel="Continue"
+         title=""
+         actionLabel="Sign In"
          onClose={loginModal.onClose}
          onSubmit={handleSubmit(onSubmit)}
          body={bodyContent}

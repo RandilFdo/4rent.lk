@@ -24,14 +24,18 @@ export default async function getListingById(params: IParams) {
       return {
          ...listing,
          createdAt: listing.createdAt.toISOString(),
+         updatedAt: listing.updatedAt.toISOString(),
+         vehicleAttributes: listing.vehicleAttributes as any,
+         propertyAttributes: listing.propertyAttributes as any,
          user: {
             ...listing.user,
             createdAt: listing.user.createdAt.toISOString(),
-            updatedAt: listing.user.updatedAt.toDateString(),
+            updatedAt: listing.user.updatedAt.toISOString(),
             emailVerified: listing.user.emailVerified?.toISOString || null,
          },
       };
    } catch (error: any) {
-      throw new Error(error);
+      console.error('Error fetching listing:', error);
+      return null;
    }
 }

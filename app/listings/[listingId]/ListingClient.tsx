@@ -37,6 +37,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
+import { FaCar, FaHome } from "react-icons/fa";
 
 const initialDateRange = {
    startDate: new Date(),
@@ -118,17 +119,35 @@ const ListingClient: React.FunctionComponent<ListingClientProps> = ({
       }
    }, [dateRange, listing.price]);
 
+   // Increment view count when component mounts
+   useEffect(() => {
+      const incrementViewCount = async () => {
+         try {
+            await axios.post(`/api/listings/${listing.id}/view`);
+         } catch (error) {
+            console.error('Error incrementing view count:', error);
+         }
+      };
+
+      incrementViewCount();
+   }, [listing.id]);
+
    const category = useMemo(() => {
-      return categories.find((item) => item.label === listing.category);
-   }, [listing.category]);
+      // For now, we'll use a default category or create a dynamic one
+      return {
+         label: `${listing.mainCategory} - ${listing.subCategory}`,
+         icon: listing.mainCategory === 'VEHICLE' ? FaCar : FaHome,
+         description: `${listing.mainCategory} rental`
+      };
+   }, [listing.mainCategory, listing.subCategory]);
    return (
       <Container>
          <div className="max-w-screen-lg mx-auto">
             <div className="flex flex-col gap-6">
                <ListingHead
                   title={listing.title}
-                  imageSrc={listing.imageSrc}
-                  locationValue={listing.locationValue}
+                  images={listing.images}
+                  locationValue={`${listing.city}, ${listing.district}`}
                   id={listing.id}
                   currentUser={currentUser}
                />
@@ -137,20 +156,16 @@ const ListingClient: React.FunctionComponent<ListingClientProps> = ({
                      user={listing.user}
                      category={category}
                      description={listing.description}
-                     roomCount={listing.roomCount}
-                     guestCount={listing.guestCount}
-                     bathroomCount={listing.bathroomCount}
-                     locationValue={listing.locationValue}
+                     roomCount={listing.propertyAttributes?.bedrooms || 0}
+                     guestCount={listing.vehicleAttributes?.seats || 0}
+                     bathroomCount={listing.propertyAttributes?.bathrooms || 0}
+                     locationValue={`${listing.city}, ${listing.district}`}
+                     listing={listing}
                   />
                   <div className="order-first  mb-10 md:order-last md:col-span-3">
                      <ListingReservation
-                        price={listing.price}
-                        totalPrice={totalPrice}
-                        onChangeDate={(value) => setDateRange(value)}
-                        dateRange={dateRange}
-                        onSubmit={onCreateReservation}
-                        disabled={isLoading}
-                        disabledDates={disabledDates}
+                        listing={listing}
+                        user={listing.user}
                      />
                   </div>
                </div>

@@ -17,8 +17,8 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-   title: "AirBnb",
-   description: "Airbnb Clone",
+   title: "4Rent - Sri Lanka's Premier Rental Marketplace",
+   description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

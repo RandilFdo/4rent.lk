@@ -55,18 +55,21 @@ const RegisterModal = () => {
 
    const bodyContent = (
       <div className="flex flex-col gap-4">
-         <Heading title="Welcome to AirBnb" subtitle="Create an Account" center />
+         <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Join 4Rent</h2>
+            <p className="text-gray-600">Create your account to start renting</p>
+         </div>
          <Input
-            id="email"
-            label="Email"
+            id="name"
+            label="Full Name"
             disabled={isLoading}
             register={register}
             errors={errors}
             required
          />
          <Input
-            id="name"
-            label="Name"
+            id="email"
+            label="Email Address"
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -85,8 +88,15 @@ const RegisterModal = () => {
    );
 
    const footerContent = (
-      <div className="flex flex-col gap-4 mt-3">
-         <hr />
+      <div className="flex flex-col gap-4 mt-6">
+         <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+               <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+               <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            </div>
+         </div>
          <Button
             outline
             label="Continue with Google"
@@ -99,13 +109,14 @@ const RegisterModal = () => {
             icon={AiFillGithub}
             onClick={() => signIn("github")}
          />
-         <div className="text-neutral-500 text-center mt-4 font-light">
-            <div className="flex flex-row items-center gap-2 justify-center">
-               <div>Already have an account?</div>
-               <div className="text-neutral-800 cursor-pointer hover:underline" onClick={onToggle}>
-                  Log in
-               </div>
-            </div>
+         <div className="text-center mt-4">
+            <span className="text-gray-600">Already have an account? </span>
+            <button
+               className="text-blue-600 hover:text-blue-500 font-medium"
+               onClick={onToggle}
+            >
+               Sign in
+            </button>
          </div>
       </div>
    );
@@ -114,8 +125,8 @@ const RegisterModal = () => {
       <Modal
          disabled={isLoading}
          isOpen={registerModal.isOpen}
-         title="Register"
-         actionLabel="Continue"
+         title=""
+         actionLabel="Create Account"
          onClose={registerModal.onClose}
          onSubmit={handleSubmit(onSubmit)}
          body={bodyContent}

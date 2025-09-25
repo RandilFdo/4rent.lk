@@ -1,7 +1,7 @@
 "use client";
 import { AiOutlineMenu } from "@react-icons/all-files/ai/AiOutlineMenu";
 import Avatar from "../Avatar";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -16,6 +16,7 @@ interface UserMenuProps {
 
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
    const [isOpen, setIsOpen] = useState(false);
+   const menuRef = useRef<HTMLDivElement>(null);
 
    const registerModal = useRegisterModal();
    const loginModal = useLoginModal();
@@ -26,23 +27,39 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       setIsOpen((value) => !value);
    }, []);
 
+   // Close dropdown when clicking outside
+   useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+         }
+      };
+
+      if (isOpen) {
+         document.addEventListener('mousedown', handleClickOutside);
+      }
+
+      return () => {
+         document.removeEventListener('mousedown', handleClickOutside);
+      };
+   }, [isOpen]);
+
    const onRent = useCallback(() => {
       if (!currentUser) {
          return loginModal.onOpen();
       }
 
-      // Open rent Modal
-
-      rentModal.onOpen();
-   }, [currentUser, loginModal, rentModal]);
+      // Navigate to posting page
+      router.push('/post');
+   }, [currentUser, loginModal, router]);
    return (
-      <div className="relative">
+      <div className="relative" ref={menuRef}>
          <div className="flex flex-row items-center gap-3">
             <div
                onClick={onRent}
-               className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
+               className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
             >
-               Airbnb your home
+               Offer Something 4Rent
             </div>
             <div
                onClick={toogleOpen}
@@ -61,13 +78,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                      <>
                         <MenuItem
                            onClick={() => {
-                              router.push("/trips");
-                              setIsOpen(false);
-                           }}
-                           label="My Trips"
-                        />
-                        <MenuItem
-                           onClick={() => {
                               router.push("/favorites");
                               setIsOpen(false);
                            }}
@@ -75,19 +85,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                         />
                         <MenuItem
                            onClick={() => {
-                              router.push("/reservations");
+                              router.push("/dashboard");
                               setIsOpen(false);
                            }}
-                           label="My Reservations"
+                           label="Dashboard"
                         />
-                        <MenuItem
-                           onClick={() => {
-                              router.push("/properties");
-                              setIsOpen(false);
-                           }}
-                           label="My Properties"
-                        />
-                        <MenuItem onClick={rentModal.onOpen} label="Airbnb my home" />
+                        <MenuItem onClick={() => { router.push('/post'); setIsOpen(false); }} label="Offer Something 4Rent" />
                         <hr />
                         <MenuItem
                            onClick={() => {
