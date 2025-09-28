@@ -6,40 +6,12 @@ import Container from "../../../components/Container";
 import Heading from "../../../components/Heading";
 import SinglePagePropertyForm from "../../../components/forms/SinglePagePropertyForm";
 
-interface PropertyFormData {
-  // Location
-  location: { district: string; city: string };
-  
-  // Property Details
-  bedrooms: number;
-  bathrooms: number;
-  area: string;
-  furnished: boolean;
-  parking: boolean;
-  garden: boolean;
-  balcony: boolean;
-  security: boolean;
-  ac: boolean;
-  wifi: boolean;
-  
-  // Listing Details
-  title: string;
-  description: string;
-  price: string;
-  priceUnit: string;
-  isNegotiable: boolean;
-  
-  // Media & Contact
-  images: string[];
-  contactPhone: string;
-  contactName: string;
-}
 
 const ApartmentPostPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleComplete = async (formData: PropertyFormData) => {
+  const handleComplete = async (formData: any) => {
     setIsLoading(true);
     
     try {
@@ -97,9 +69,9 @@ const ApartmentPostPage = () => {
   };
 
   return (
-    <div className="pt-8 pb-12 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
       <Container>
-        <div className="text-center mb-4">
+        <div className="text-center pt-32 mb-4">
           <Heading
             title="List Your Apartment for Rent"
             subtitle="Fill in the details of your apartment"

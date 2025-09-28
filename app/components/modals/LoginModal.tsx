@@ -2,7 +2,6 @@
 
 import { signIn } from "next-auth/react";
 // import axios from "axios";
-import { AiFillGithub } from "@react-icons/all-files/ai/AiFillGithub";
 import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -61,8 +60,8 @@ const LoginModal = () => {
    const bodyContent = (
       <div className="flex flex-col gap-4">
          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to 4Rent</h2>
-            <p className="text-gray-600">Sign in to your account to continue</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome to 4Rent</h2>
+            <p className="text-gray-600 dark:text-gray-400">Log in to your account to continue</p>
          </div>
          <Input
             id="email"
@@ -88,10 +87,10 @@ const LoginModal = () => {
       <div className="flex flex-col gap-4 mt-6">
          <div className="relative">
             <div className="absolute inset-0 flex items-center">
-               <div className="w-full border-t border-gray-300" />
+               <div className="w-full border-t border-gray-300 dark:border-gray-600" />
             </div>
             <div className="relative flex justify-center text-sm">
-               <span className="px-2 bg-white text-gray-500">Or continue with</span>
+               <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
             </div>
          </div>
          <Button
@@ -100,16 +99,10 @@ const LoginModal = () => {
             icon={FcGoogle}
             onClick={() => signIn("google")}
          />
-         <Button
-            outline
-            label="Continue with Github"
-            icon={AiFillGithub}
-            onClick={() => signIn("github")}
-         />
          <div className="text-center mt-4">
-            <span className="text-gray-600">Don't have an account? </span>
+            <span className="text-gray-600 dark:text-gray-400">Don't have an account? </span>
             <button
-               className="text-blue-600 hover:text-blue-500 font-medium"
+               className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
                onClick={onToggle}
             >
                Sign up for 4Rent
@@ -123,7 +116,7 @@ const LoginModal = () => {
          disabled={isLoading}
          isOpen={loginModal.isOpen}
          title=""
-         actionLabel="Sign In"
+         actionLabel="Log In"
          onClose={loginModal.onClose}
          onSubmit={handleSubmit(onSubmit)}
          body={bodyContent}

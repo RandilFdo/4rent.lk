@@ -28,16 +28,16 @@ const Button: React.FC<ButtonProps> = ({
     relative
     disabled:opacity-70
     disabled:cursor-not-allowed
-    rounded-xl
+    rounded-lg sm:rounded-xl
     font-semibold
     overflow-hidden
     group
     w-full
     ${outline 
-      ? "bg-white border-2 border-gray-300 text-gray-700 hover:border-purple-500 hover:text-purple-600 hover:shadow-lg" 
+      ? "bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-purple-500 dark:hover:border-purple-400 hover:text-purple-600 dark:hover:text-purple-400 hover:shadow-lg" 
       : "btn-gradient text-white border-0 shadow-lg hover:shadow-xl"
     }
-    ${small ? "py-2 px-4 text-sm" : "py-3 px-6 text-md"}
+    ${small ? "py-1.5 sm:py-2 px-3 sm:px-4 text-xs sm:text-sm" : "py-2 sm:py-3 px-4 sm:px-6 text-sm sm:text-md"}
     ${className}
    `}
       >

@@ -1,13 +1,16 @@
 import { Listing, Reservation, User } from "@prisma/client";
 
 // Main categories
-export type MainCategory = "VEHICLE" | "PROPERTY";
+export type MainCategory = "VEHICLE" | "PROPERTY" | "EXPERIENCE";
 
 // Vehicle types
-export type VehicleType = "CAR" | "VAN" | "SUV" | "BIKE" | "LUXURY" | "WEDDING_CAR" | "BUS" | "THREE_WHEELER";
+export type VehicleType = "CAR" | "VAN" | "SUV" | "BIKE" | "LUXURY" | "WEDDING_CAR" | "BUS" | "THREE_WHEELER" | "TRUCK";
 
 // Property types
 export type PropertyType = "HOUSE" | "APARTMENT" | "ROOM" | "COMMERCIAL" | "VILLA" | "BOUTIQUE_HOTEL";
+
+// Experience types
+export type ExperienceType = "TOUR_GUIDE" | "SNORKELING" | "SURFING" | "HORSE_RIDING" | "BOAT_RIDING" | "HIKING" | "WILDLIFE_SAFARI" | "CULTURAL_TOUR" | "FOOD_TOUR" | "ADVENTURE_SPORTS" | "OTHER";
 
 // Transmission types
 export type TransmissionType = "AUTO" | "MANUAL";
@@ -46,6 +49,20 @@ export interface PropertyAttributes {
   features?: string[]; // WiFi, AC, etc.
 }
 
+// Experience attributes interface
+export interface ExperienceAttributes {
+  experienceType: ExperienceType;
+  duration: number; // in hours
+  maxParticipants: number;
+  minAge?: number;
+  difficultyLevel: "EASY" | "MEDIUM" | "HARD";
+  includes: string[]; // Equipment, meals, transport, etc.
+  requirements: string[]; // What participants need to bring
+  languages: string[]; // Languages the guide speaks
+  seasonality?: string; // Best time of year
+  safetyNotes?: string;
+}
+
 // Sri Lankan districts
 export type SriLankanDistrict = 
   | "COLOMBO" | "GAMPAHA" | "KALUTARA" | "KANDY" | "MATALE" | "NUWARA_ELIYA"
@@ -54,11 +71,14 @@ export type SriLankanDistrict =
   | "KURUNEGALA" | "PUTTALAM" | "ANURADHAPURA" | "POLONNARUWA"
   | "BADULLA" | "MONARAGALA" | "RATNAPURA" | "KEGALLE";
 
-export type SafeListing = Omit<Listing, "createdAt" | "updatedAt"> & {
+export type SafeListing = Omit<Listing, "createdAt" | "updatedAt" | "expiresAt" | "lastRenewedAt"> & {
    createdAt: string;
    updatedAt: string;
+   expiresAt?: string;
+   lastRenewedAt?: string;
    vehicleAttributes?: VehicleAttributes;
    propertyAttributes?: PropertyAttributes;
+   experienceAttributes?: ExperienceAttributes;
 };
 
 export type SafeReservation = Omit<

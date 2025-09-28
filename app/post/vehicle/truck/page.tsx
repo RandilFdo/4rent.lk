@@ -84,9 +84,9 @@ const TruckPostPage = () => {
   };
 
   return (
-    <div className="pt-8 pb-12 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
       <Container>
-        <div className="text-center mb-4">
+        <div className="text-center pt-32 mb-4">
           <Heading
             title="List Your Truck"
             subtitle="Fill in the details of your truck"
@@ -94,7 +94,7 @@ const TruckPostPage = () => {
         </div>
         
         <SinglePageVehicleForm
-          vehicleType="TRUCK" as VehicleType
+          vehicleType="TRUCK"
           onComplete={handleComplete}
           onCancel={handleCancel}
           isLoading={isLoading}

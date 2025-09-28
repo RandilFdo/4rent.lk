@@ -32,13 +32,13 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ value, onChange }) => {
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           District *
         </label>
         <select
           value={selectedDistrict}
           onChange={(e) => handleDistrictChange(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           required
         >
           <option value="">Select District</option>
@@ -51,13 +51,13 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ value, onChange }) => {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           City *
         </label>
         <select
           value={selectedCity}
           onChange={(e) => handleCityChange(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           disabled={!selectedDistrict}
           required
         >

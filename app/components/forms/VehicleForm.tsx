@@ -54,7 +54,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
     year: "",
     transmission: "",
     fuelType: "",
-    seats: vehicleType === "BIKE" ? 2 : 5,
+    seats: vehicleType === "BIKE" ? 2 : vehicleType === "VAN" ? 8 : 4,
     mileage: "",
     title: "",
     description: "",
@@ -65,6 +65,8 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
     contactName: ""
   });
 
+  // Note: Autofill removed - no profile system implemented yet
+
   const updateFormData = (field: keyof VehicleFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -72,7 +74,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
   const getVehicleTypeInfo = () => {
     switch (vehicleType) {
       case "CAR":
-        return { icon: "🚗", name: "Car", seats: 5 };
+        return { icon: "🚗", name: "Car", seats: 4 };
       case "BIKE":
         return { icon: "🏍️", name: "Bike", seats: 2 };
       case "VAN":
@@ -88,7 +90,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
       case "THREE_WHEELER":
         return { icon: "🛺", name: "Three Wheeler", seats: 3 };
       default:
-        return { icon: "🚗", name: "Vehicle", seats: 5 };
+        return { icon: "🚗", name: "Vehicle", seats: 4 };
     }
   };
 
@@ -286,8 +288,8 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
         <div className="space-y-6">
           <div className="text-center mb-6">
             <div className="text-4xl mb-2">📸</div>
-            <h3 className="text-xl font-semibold">Add Photos</h3>
-            <p className="text-gray-600">Good photos attract more renters</p>
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Add Photos</h3>
+            <p className="text-gray-600 dark:text-gray-400">Good photos attract more renters</p>
           </div>
           
           <ImageUpload
@@ -312,8 +314,8 @@ const VehicleForm: React.FC<VehicleFormProps> = ({
         <div className="space-y-6">
           <div className="text-center mb-6">
             <div className="text-4xl mb-2">📞</div>
-            <h3 className="text-xl font-semibold">Contact Details</h3>
-            <p className="text-gray-600">How can interested renters contact you?</p>
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Contact Details</h3>
+            <p className="text-gray-600 dark:text-gray-400">How can interested renters contact you?</p>
           </div>
           
           <div className="max-w-md mx-auto space-y-4">

@@ -12,7 +12,7 @@ export default async function getFavoriteListings() {
       const favorites = await prisma.listing.findMany({
          where: {
             id: {
-               in: [...(currentUser.favoriteIds || [])],
+               in: [...(('favoriteIds' in currentUser ? currentUser.favoriteIds : []) || [])],
             },
          },
       });
@@ -21,8 +21,11 @@ export default async function getFavoriteListings() {
          ...favorite,
          createdAt: favorite.createdAt.toISOString(),
          updatedAt: favorite.updatedAt.toISOString(),
+         expiresAt: favorite.expiresAt ? favorite.expiresAt.toISOString() : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // Default to 30 days from now if not set
+         lastRenewedAt: favorite.lastRenewedAt ? favorite.lastRenewedAt.toISOString() : undefined,
          vehicleAttributes: favorite.vehicleAttributes as any,
          propertyAttributes: favorite.propertyAttributes as any,
+         experienceAttributes: favorite.experienceAttributes as any,
       }));
 
       return safeFavorites;

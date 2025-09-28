@@ -1,13 +1,13 @@
 "use client";
 
-import { PuffLoader } from "react-spinners";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface LoaderProps {}
 
 const Loader: React.FC<LoaderProps> = ({}) => {
    return (
-      <div className="h-[70vh] flex flex-col justify-center items-center">
-         <PuffLoader size={100} color="red" />
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
+         <LoadingSpinner size="xl" text="Loading..." />
       </div>
    );
 };

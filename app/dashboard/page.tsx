@@ -17,7 +17,7 @@ const DashboardPage = async () => {
     redirect("/");
   }
 
-  return <DashboardClient currentUser={currentUser} />;
+  return <DashboardClient currentUser={currentUser as any} />;
 };
 
 export default DashboardPage;

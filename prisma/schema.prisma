@@ -56,11 +56,11 @@ model Listing {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   
-  // Main category (VEHICLE or PROPERTY)
+  // Main category (VEHICLE, PROPERTY, or EXPERIENCE)
   mainCategory   String
   
   // Subcategory
-  subCategory    String // car, bike, tuktuk, truck, wedding, house, apartment, etc.
+  subCategory    String // car, bike, tuktuk, truck, wedding, house, apartment, tour, snorkeling, etc.
   
   // Location fields
   district       String
@@ -81,6 +81,8 @@ model Listing {
   isFeatured     Boolean @default(false)
   adminNotes     String?
   viewCount      Int @default(0)
+  expiresAt      DateTime?
+  lastRenewedAt  DateTime?
   
   // User relation
   userId         String @db.ObjectId
@@ -90,6 +92,9 @@ model Listing {
   
   // Property-specific attributes (JSON for flexibility)
   propertyAttributes Json?
+
+  // Experience-specific attributes (JSON for flexibility)
+  experienceAttributes Json?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]

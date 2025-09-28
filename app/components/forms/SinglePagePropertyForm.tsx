@@ -80,6 +80,8 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
     contactName: initialData?.contactName || ""
   });
 
+  // Note: Autofill removed - no profile system implemented yet
+
   const updateFormData = (field: keyof PropertyFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -156,7 +158,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
   const validateCurrentStep = () => {
     switch (activeTab) {
       case "location":
-        return formData.location.district && formData.location.city;
+        return formData.location.district && formData.location.city && formData.address;
       case "property":
         switch (propertyType) {
           case "house":
@@ -235,8 +237,26 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
       return;
     }
 
-    if (!formData.title || !formData.description || !formData.price || !formData.contactPhone || !formData.area) {
-      alert('Please fill in all required fields');
+    // Debug: Check which fields are missing based on property type
+    const missingFields = [];
+    if (!formData.title) missingFields.push('title');
+    if (!formData.description) missingFields.push('description');
+    if (!formData.price) missingFields.push('price');
+    if (!formData.contactPhone) missingFields.push('contactPhone');
+    if (!formData.contactName) missingFields.push('contactName');
+    if (!formData.address) missingFields.push('address');
+    
+    // Property size is required for most property types except room and holiday
+    if (propertyType !== "room" && propertyType !== "holiday" && !formData.propertySize) {
+      missingFields.push('propertySize');
+    }
+    
+    console.log('Form data:', formData);
+    console.log('Property type:', propertyType);
+    console.log('Missing fields:', missingFields);
+    
+    if (missingFields.length > 0) {
+      alert(`Please fill in all required fields. Missing: ${missingFields.join(', ')}`);
       return;
     }
 
@@ -247,8 +267,8 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
   return (
     <div className="max-w-6xl mx-auto">
       {/* Tab Navigation */}
-      <div className="mb-4">
-        <div className="flex flex-wrap gap-2 justify-center">
+      <div className="mb-3 sm:mb-4">
+        <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
           {tabs.map((tab) => {
             const canAccess = canSwitchToTab(tab.id);
             return (
@@ -256,14 +276,14 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 disabled={!canAccess}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all duration-200 text-sm sm:text-base ${
                   canAccess ? 'hover:scale-105' : ''
                 } ${
                   activeTab === tab.id
-                    ? 'bg-blue-500 text-white shadow-lg border-2 border-blue-600'
+                    ? 'bg-blue-500 dark:bg-blue-600 text-white shadow-lg border-2 border-blue-600 dark:border-blue-500'
                     : canAccess
-                    ? 'bg-white text-gray-800 hover:bg-blue-50 hover:shadow-md border-2 border-gray-300 hover:border-blue-300'
-                    : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-200'
+                    ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-600 hover:shadow-md border-2 border-gray-300 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-400'
+                    : 'bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed border-2 border-gray-200 dark:border-gray-700'
                 }`}
               >
                 <span>{tab.icon}</span>
@@ -274,14 +294,14 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Main Details */}
           <div className="space-y-6">
             {/* Location */}
             {activeTab === "location" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📍</span> Location Details
                 </h3>
                 <div className="space-y-4">
@@ -291,10 +311,11 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                   />
                   
                   <Input
-                    label="Enter the street, house number, and/or post code."
+                    label="Enter the street, house number, and/or post code. *"
                     value={formData.address}
                     onChange={(e) => updateFormData("address", e.target.value)}
-                    placeholder="Address (optional)"
+                    placeholder="Address (required)"
+                    required
                   />
                 </div>
               </div>
@@ -303,7 +324,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
             {/* Property Details */}
             {activeTab === "property" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>{propertyInfo.icon}</span> {propertyInfo.name} Details
                 </h3>
                 <div className="space-y-4">
@@ -326,10 +347,12 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             What's the size of your land? *
                           </label>
                           <Input
+                            id="landSize"
+                            label=""
                             value={formData.landSize}
                             onChange={(e) => updateFormData("landSize", e.target.value)}
                             placeholder="Land size"
@@ -337,13 +360,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Unit *
                           </label>
                           <select
                             value={formData.landSizeUnit}
                             onChange={(e) => updateFormData("landSizeUnit", e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             required
                           >
                             <option value="perches">Perches</option>
@@ -389,13 +412,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                       />
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Furnished status *
                         </label>
                         <select
                           value={formData.furnishedStatus}
                           onChange={(e) => updateFormData("furnishedStatus", e.target.value)}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           required
                         >
                           <option value="unfurnished">Unfurnished</option>
@@ -417,13 +440,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                   {propertyType === "commercial" && (
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Property type * (building, factory/workshop, hotel, office, restaurant, shop, warehouse/storage, other)
                         </label>
                         <select
                           value={formData.propertyType}
                           onChange={(e) => updateFormData("propertyType", e.target.value)}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           required
                         >
                           <option value="">Select Property Type</option>
@@ -466,13 +489,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                       />
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Property type *
                         </label>
                         <select
                           value={formData.propertyType}
                           onChange={(e) => updateFormData("propertyType", e.target.value)}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           required
                         >
                           <option value="">Select Property Type</option>
@@ -500,13 +523,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Floor
                           </label>
                           <select
                             value={formData.floor}
                             onChange={(e) => updateFormData("floor", e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           >
                             <option value="">Select Floor</option>
                             <option value="lower">Lower</option>
@@ -536,13 +559,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                       />
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Property type *
                         </label>
                         <select
                           value={formData.propertyType}
                           onChange={(e) => updateFormData("propertyType", e.target.value)}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           required
                         >
                           <option value="">Select Property Type</option>
@@ -560,13 +583,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                   {propertyType === "land" && (
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Land type *
                         </label>
                         <select
                           value={formData.landType}
                           onChange={(e) => updateFormData("landType", e.target.value)}
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                           required
                         >
                           <option value="">Select Land Type</option>
@@ -579,10 +602,12 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             What's the size of your land? *
                           </label>
                           <Input
+                            id="landSize"
+                            label=""
                             value={formData.landSize}
                             onChange={(e) => updateFormData("landSize", e.target.value)}
                             placeholder="Land size"
@@ -590,13 +615,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Unit *
                           </label>
                           <select
                             value={formData.landSizeUnit}
                             onChange={(e) => updateFormData("landSizeUnit", e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                             required
                           >
                             <option value="perches">Perches</option>
@@ -614,7 +639,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
             {/* Listing Details */}
             {activeTab === "listing" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📝</span> Listing Details
                 </h3>
                 <div className="space-y-4">
@@ -627,13 +652,13 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                   />
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Description * (0/5000)
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => updateFormData("description", e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       rows={4}
                       maxLength={5000}
                       placeholder="Describe your property, its features, location advantages, and what makes it special..."
@@ -650,7 +675,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
             {/* Pricing */}
             {activeTab === "pricing" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>💰</span> Pricing
                 </h3>
                 <div className="space-y-4">
@@ -663,6 +688,22 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                     required
                   />
                   
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Price Unit *
+                    </label>
+                    <select
+                      value={formData.priceUnit}
+                      onChange={(e) => updateFormData("priceUnit", e.target.value)}
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      required
+                    >
+                      <option value="per night">Per Night</option>
+                      <option value="per month">Per Month</option>
+                      <option value="per year">Per Year</option>
+                    </select>
+                  </div>
+                  
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
@@ -671,9 +712,14 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                       onChange={(e) => updateFormData("isNegotiable", e.target.checked)}
                       className="rounded"
                     />
-                    <label htmlFor="negotiable" className="text-sm text-gray-700">
+                    <label htmlFor="negotiable" className="text-sm text-gray-700 dark:text-gray-300">
                       Negotiable
                     </label>
+                  </div>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> Your listing will automatically expire after 30 days. You can renew it for free from your dashboard before it expires.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -682,12 +728,12 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
             {/* Photos */}
             {activeTab === "media" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📸</span> Add Photos
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Add up to 5 photos
                     </label>
                     <ImageUpload
@@ -708,7 +754,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
             {/* Contact Details */}
             {activeTab === "contact" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📞</span> Contact Details
                 </h3>
                 <div className="space-y-4">
@@ -734,8 +780,8 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
           </div>
 
           {/* Right Column - Summary */}
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Listing Summary</h3>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Listing Summary</h3>
             
             {/* Cover Image */}
             {formData.images.length > 0 && (
@@ -748,7 +794,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
               </div>
             )}
             
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
               <div>
                 <span className="font-medium">Location:</span>
                 <span className="ml-2">
@@ -796,9 +842,9 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
                 <span className="ml-2">
                   {formData.price ? (
                     <span>
-                      LKR {formData.price}/{propertyInfo.priceUnit}
+                      LKR {formData.price}/{formData.priceUnit}
                       {formData.isNegotiable && (
-                        <span className="text-xs text-green-600 ml-1">(Negotiable)</span>
+                        <span className="text-xs text-green-600 dark:text-green-400 ml-1">(Negotiable)</span>
                       )}
                     </span>
                   ) : "Not specified"}
@@ -828,7 +874,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-white"
               disabled={isLoading}
             >
               Cancel
@@ -837,7 +883,7 @@ const SinglePagePropertyForm: React.FC<SinglePagePropertyFormProps> = ({
               <button
                 type="button"
                 onClick={handlePrevStep}
-                className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-white"
                 disabled={isLoading}
               >
                 Previous

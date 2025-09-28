@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import useRentModal from "@/app/hooks/useRentModal";
 import { useRouter } from "next/navigation";
+import useDarkMode from "@/app/hooks/useDarkMode";
 
 interface UserMenuProps {
    currentUser?: SafeUser | null;
@@ -22,6 +23,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
    const loginModal = useLoginModal();
    const rentModal = useRentModal();
    const router = useRouter();
+   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
    const toogleOpen = useCallback(() => {
       setIsOpen((value) => !value);
@@ -54,25 +56,25 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
    }, [currentUser, loginModal, router]);
    return (
       <div className="relative" ref={menuRef}>
-         <div className="flex flex-row items-center gap-3">
+         <div className="flex flex-row items-center gap-2 sm:gap-3">
             <div
                onClick={onRent}
-               className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
+               className="hidden md:block text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
             >
                Offer Something 4Rent
             </div>
             <div
                onClick={toogleOpen}
-               className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
+               className="p-2 sm:p-3 md:py-1 md:px-2 border-[1px] border-neutral-200 dark:border-gray-600 flex flex-row items-center gap-2 sm:gap-3 rounded-full cursor-pointer hover:shadow-md transition"
             >
-               <AiOutlineMenu />
+               <AiOutlineMenu className="text-sm sm:text-base text-gray-700 dark:text-white" />
                <div className="hidden md:block">
                   <Avatar src={currentUser?.image} />
                </div>
             </div>
          </div>
          {isOpen && (
-            <div className="absolute rounded-xl shadow-md w-[40vw] md:w-full bg-white overflow-hidden right-0 top-14 text-sm">
+            <div className="absolute rounded-xl shadow-md w-[50vw] sm:w-[40vw] md:w-full bg-white dark:bg-gray-800 overflow-hidden right-0 top-12 sm:top-14 text-sm">
                <div className="flex flex-col cursor-pointer">
                   {currentUser ? (
                      <>
@@ -91,6 +93,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                            label="Dashboard"
                         />
                         <MenuItem onClick={() => { router.push('/post'); setIsOpen(false); }} label="Offer Something 4Rent" />
+                        <MenuItem
+                           onClick={() => {
+                              toggleDarkMode();
+                              setIsOpen(false);
+                           }}
+                           label={isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                        />
                         <hr />
                         <MenuItem
                            onClick={() => {
@@ -103,6 +112,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                      <>
                         <MenuItem onClick={loginModal.onOpen} label="Login" />
                         <MenuItem onClick={registerModal.onOpen} label="Sign Up" />
+                        <hr />
+                        <MenuItem
+                           onClick={() => {
+                              toggleDarkMode();
+                              setIsOpen(false);
+                           }}
+                           label={isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                        />
                      </>
                   )}
                </div>

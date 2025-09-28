@@ -6,10 +6,12 @@ import Navbar from "./components/navbar/Navbar";
 import ClientOnly from "./components/ClientOnly";
 import RegisterModal from "./components/modals/RegisterModal";
 import ToasterProvider from "./providers/ToasterProvider";
+import SessionProvider from "./providers/SessionProvider";
 import LoginModal from "./components/modals/LoginModal";
 import getCurrentUser from "./actions/getCurrentUser";
 import RentModal from "./components/modals/RentModal";
 import SearchModal from "./components/modals/SearchModal";
+import ConditionalLayout from "./components/ConditionalLayout";
 
 // const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({
@@ -26,15 +28,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
    return (
       <html lang="en">
          <body className={nunito.className}>
-            <ClientOnly>
-               <ToasterProvider />
-               <SearchModal />
-               <RentModal />
-               <LoginModal />
-               <RegisterModal />
-               <Navbar currentUser={currentUser} />
-            </ClientOnly>
-            <div className="pb-20 pt-28">{children}</div>
+            <SessionProvider>
+               <ClientOnly>
+                  <ToasterProvider />
+                  <SearchModal />
+                  <RentModal />
+                  <LoginModal />
+                  <RegisterModal />
+                   <Navbar currentUser={currentUser as any} />
+               </ClientOnly>
+               <ConditionalLayout>{children}</ConditionalLayout>
+            </SessionProvider>
          </body>
       </html>
    );

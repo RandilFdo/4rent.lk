@@ -57,7 +57,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
     year: initialData?.year || "",
     transmission: initialData?.transmission || "",
     fuelType: initialData?.fuelType || "",
-    seats: initialData?.seats || (vehicleType === "BIKE" ? 2 : 5),
+    seats: initialData?.seats || (vehicleType === "BIKE" ? 2 : vehicleType === "VAN" ? 8 : 4),
     mileage: initialData?.mileage || "",
     title: initialData?.title || "",
     description: initialData?.description || "",
@@ -69,6 +69,8 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
     contactName: initialData?.contactName || ""
   });
 
+  // Note: Autofill removed - no profile system implemented yet
+
   const updateFormData = (field: keyof VehicleFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -76,7 +78,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
   const getVehicleTypeInfo = () => {
     switch (vehicleType) {
       case "CAR":
-        return { icon: "🚗", name: "Car", seats: 5 };
+        return { icon: "🚗", name: "Car", seats: 4 };
       case "BIKE":
         return { icon: "🏍️", name: "Bike", seats: 2 };
       case "VAN":
@@ -94,7 +96,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
       case "TRUCK":
         return { icon: "🚛", name: "Truck", seats: 2 };
       default:
-        return { icon: "🚗", name: "Vehicle", seats: 5 };
+        return { icon: "🚗", name: "Vehicle", seats: 4 };
     }
   };
 
@@ -191,8 +193,8 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
   return (
     <div className="max-w-6xl mx-auto">
       {/* Tab Navigation */}
-      <div className="mb-4">
-        <div className="flex flex-wrap gap-2 justify-center">
+      <div className="mb-3 sm:mb-4">
+        <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
           {tabs.map((tab) => {
             const canAccess = canSwitchToTab(tab.id);
             return (
@@ -200,14 +202,14 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 disabled={!canAccess}
-                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
+                 className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg transition-all duration-200 text-sm sm:text-base ${
                    canAccess ? 'hover:scale-105' : ''
                  } ${
                    activeTab === tab.id
                      ? 'bg-blue-500 text-white shadow-lg border-2 border-blue-600'
                      : canAccess
-                     ? 'bg-white text-gray-800 hover:bg-blue-50 hover:shadow-md border-2 border-gray-300 hover:border-blue-300'
-                     : 'bg-gray-200 text-gray-500 cursor-not-allowed border-2 border-gray-200'
+                     ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-600 hover:shadow-md border-2 border-gray-300 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-400'
+                     : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed border-2 border-gray-200 dark:border-gray-500'
                  }`}
               >
                 <span>{tab.icon}</span>
@@ -218,14 +220,14 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
+      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Main Details */}
           <div className="space-y-6">
             {/* Location */}
             {activeTab === "location" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📍</span> Location Details
                 </h3>
                 <LocationSelect
@@ -238,7 +240,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             {/* Vehicle Details */}
             {activeTab === "vehicle" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>{vehicleInfo.icon}</span> {vehicleInfo.name} Details
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -265,13 +267,13 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                     required
                   />
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Transmission *
                     </label>
                     <select
                       value={formData.transmission}
                       onChange={(e) => updateFormData("transmission", e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       required
                     >
                       <option value="">Select Transmission</option>
@@ -280,13 +282,13 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Fuel Type *
                     </label>
                     <select
                       value={formData.fuelType}
                       onChange={(e) => updateFormData("fuelType", e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       required
                     >
                       <option value="">Select Fuel Type</option>
@@ -321,7 +323,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             {/* Listing Details */}
             {activeTab === "listing" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📝</span> Listing Details
                 </h3>
                 <div className="space-y-4">
@@ -334,13 +336,13 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                   />
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Description * (0/5000)
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => updateFormData("description", e.target.value)}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                       rows={4}
                       maxLength={5000}
                       placeholder="More details = more interested buyers! Describe the condition, features, and any special notes."
@@ -357,7 +359,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             {/* Pricing */}
             {activeTab === "pricing" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>💰</span> Pricing
                 </h3>
                 <div className="space-y-4">
@@ -372,13 +374,13 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                     />
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Price Unit *
                       </label>
                       <select
                         value={formData.priceUnit}
                         onChange={(e) => updateFormData("priceUnit", e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         required
                       >
                         <option value="per day">Per Day</option>
@@ -406,7 +408,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             {/* Photos */}
             {activeTab === "media" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📸</span> Add Photos
                 </h3>
                 <ImageUpload
@@ -425,7 +427,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             {/* Contact Details */}
             {activeTab === "contact" && (
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <span>📞</span> Contact Details
                 </h3>
                 <div className="space-y-4">
@@ -451,8 +453,8 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
           </div>
 
           {/* Right Column - Summary */}
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">Listing Summary</h3>
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Listing Summary</h3>
             
             {/* Cover Image */}
             {formData.images.length > 0 && (
@@ -465,7 +467,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
               </div>
             )}
             
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
               <div>
                 <span className="font-medium">Location:</span>
                 <span className="ml-2">
@@ -495,7 +497,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                     <span>
                       LKR {formData.price}/{formData.priceUnit}
                       {formData.isNegotiable && (
-                        <span className="text-xs text-green-600 ml-1">(Negotiable)</span>
+                        <span className="text-xs text-green-600 dark:text-green-400 ml-1">(Negotiable)</span>
                       )}
                     </span>
                   ) : "Not specified"}
@@ -523,7 +525,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-white"
               disabled={isLoading}
             >
               Cancel
@@ -532,7 +534,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
               <button
                 type="button"
                 onClick={handlePrevStep}
-                className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-white"
                 disabled={isLoading}
               >
                 Previous

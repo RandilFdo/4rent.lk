@@ -5,6 +5,7 @@ import { SafeUser, SafeListing } from "@/app/types";
 import Container from "@/app/components/Container";
 import Heading from "@/app/components/Heading";
 import ListingCard from "@/app/components/listings/ListingCard";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 
 interface DashboardClientProps {
@@ -83,6 +84,30 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
     }
   };
 
+  const handleRenewListing = async (listingId: string) => {
+    if (!confirm('Are you sure you want to renew this listing? It will be extended for another 30 days.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/listings/${listingId}`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        // Refresh the listings to show updated expiration date
+        fetchUserListings();
+        alert('Listing renewed successfully for another 30 days!');
+      } else {
+        const error = await response.json();
+        alert(error.message || 'Failed to renew listing');
+      }
+    } catch (error) {
+      console.error('Error renewing listing:', error);
+      alert('Failed to renew listing');
+    }
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-LK', {
       style: 'currency',
@@ -92,8 +117,27 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
     }).format(price);
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string, listing: any) => {
     const baseClasses = "px-3 py-1 rounded-full text-sm font-medium";
+    
+    // Check if listing is expired
+    const now = new Date();
+    let daysUntilExpiry = 0;
+    
+    if (listing.expiresAt) {
+      const expiresAt = new Date(listing.expiresAt);
+      daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    } else {
+      // Calculate from creation date if no expiry date
+      const createdAt = new Date(listing.createdAt);
+      const thirtyDaysFromCreation = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000);
+      daysUntilExpiry = Math.ceil((thirtyDaysFromCreation.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    }
+    
+    if (daysUntilExpiry <= 0) {
+      return `${baseClasses} bg-red-100 text-red-800`;
+    }
+    
     switch (status) {
       case 'APPROVED':
         return `${baseClasses} bg-green-100 text-green-800`;
@@ -108,20 +152,19 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
 
   if (loading) {
     return (
-      <Container>
-        <div className="pt-24">
-          <div className="text-center">Loading your dashboard...</div>
-        </div>
-      </Container>
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+        <LoadingSpinner size="lg" text="Loading your dashboard..." />
+      </div>
     );
   }
 
   return (
-    <Container>
-      <div className="pt-24 pb-8">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <Container>
+        <div>
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <Heading
               title="Your Dashboard"
               subtitle={`Welcome back, ${currentUser.name}! Manage your listings here.`}
@@ -129,63 +172,63 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Listings</p>
-                  <p className="text-3xl font-bold text-gray-900">{stats.totalListings}</p>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Total Listings</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{stats.totalListings}</p>
                 </div>
-                <div className="text-2xl">📋</div>
+                <div className="text-lg sm:text-xl md:text-2xl">📋</div>
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Approved</p>
-                  <p className="text-3xl font-bold text-green-600">{stats.approvedListings}</p>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Approved</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-green-600">{stats.approvedListings}</p>
                 </div>
-                <div className="text-2xl">✅</div>
+                <div className="text-lg sm:text-xl md:text-2xl">✅</div>
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Pending</p>
-                  <p className="text-3xl font-bold text-yellow-600">{stats.pendingListings}</p>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Pending</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-600">{stats.pendingListings}</p>
                 </div>
-                <div className="text-2xl">⏳</div>
+                <div className="text-lg sm:text-xl md:text-2xl">⏳</div>
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Views</p>
-                  <p className="text-3xl font-bold text-blue-600">{stats.totalViews}</p>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Total Views</p>
+                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600">{stats.totalViews}</p>
                 </div>
-                <div className="text-2xl">👁️</div>
+                <div className="text-lg sm:text-xl md:text-2xl">👁️</div>
               </div>
             </div>
           </div>
 
           {/* Actions */}
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <button
               onClick={() => router.push('/post')}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm sm:text-base"
             >
               + Post New Listing
             </button>
           </div>
 
           {/* Listings */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold text-gray-900">Your Listings</h3>
-              <span className="text-sm text-gray-600">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Your Listings</h3>
+              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                 {listings.length} {listings.length === 1 ? 'listing' : 'listings'}
               </span>
             </div>
@@ -193,8 +236,8 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
             {listings.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">📋</div>
-                <h4 className="text-lg font-medium text-gray-900 mb-2">No listings yet</h4>
-                <p className="text-gray-600 mb-6">Start by posting your first listing!</p>
+                <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No listings yet</h4>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">Start by posting your first listing!</p>
                 <button
                   onClick={() => router.push('/post')}
                   className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -203,12 +246,13 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                 </button>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-6">
                 {listings.map((listing) => (
-                  <div key={listing.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                  <div key={listing.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 lg:p-6 hover:shadow-md transition-shadow flex flex-col h-full bg-white dark:bg-gray-800">
+                    {/* Mobile: Card layout, Desktop: Row layout */}
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
                       {/* Image */}
-                      <div className="w-full lg:w-48 h-32 rounded-lg overflow-hidden">
+                      <div className="w-full lg:w-48 h-32 lg:h-32 rounded-lg overflow-hidden flex-shrink-0">
                         {listing.images && listing.images.length > 0 ? (
                           <img
                             src={listing.images[0]}
@@ -216,69 +260,183 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                            <span className="text-gray-400">No Image</span>
+                          <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                            <span className="text-gray-400 dark:text-gray-500">No Image</span>
                           </div>
                         )}
                       </div>
 
                       {/* Content */}
-                      <div className="flex-1">
-                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                          <div className="flex-1">
-                            <h4 className="text-lg font-semibold text-gray-900 mb-2">{listing.title}</h4>
-                            <p className="text-gray-600 mb-3 line-clamp-2">{listing.description}</p>
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 flex-1">
+                          <div className="flex-1 flex flex-col">
+                            {/* Title - Fixed height */}
+                            <div className="h-12 mb-2 flex items-start">
+                              <h4 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">{listing.title}</h4>
+                            </div>
                             
-                            <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
-                              <span>📍 {listing.city}, {listing.district}</span>
-                              <span>💰 {formatPrice(listing.price)} {listing.priceUnit}</span>
-                              <span>📅 {new Date(listing.createdAt).toLocaleDateString()}</span>
+                            {/* Description - Fixed height */}
+                            <div className="h-10 mb-3 flex items-start">
+                              <p className="text-gray-600 dark:text-gray-300 line-clamp-2 text-sm">{listing.description}</p>
+                            </div>
+                            
+                            {/* Location - Fixed height */}
+                            <div className="h-5 mb-2 flex items-center">
+                              <span className="text-sm text-gray-600 dark:text-gray-300">📍 {listing.city}, {listing.district}</span>
+                            </div>
+                            
+                            {/* Price - Fixed height */}
+                            <div className="h-5 mb-2 flex items-center">
+                              <span className="text-sm text-gray-600 dark:text-gray-300">💰 {formatPrice(listing.price)} {listing.priceUnit}</span>
+                            </div>
+                            
+                            {/* Date - Fixed height */}
+                            <div className="h-5 mb-3 flex items-center">
+                              <span className="text-sm text-gray-600 dark:text-gray-300">📅 {new Date(listing.createdAt).toLocaleDateString()}</span>
                             </div>
 
-                            <div className="flex items-center gap-3">
-                              <span className={getStatusBadge(listing.status)}>
-                                {listing.status}
-                              </span>
-                              {listing.isFeatured && (
-                                <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
-                                  ⭐ Featured
+                            {/* Status Badge - Fixed height */}
+                            <div className="h-8 mb-2 flex items-center">
+                              <div className="flex items-center gap-2">
+                                <span className={getStatusBadge(listing.status, listing)}>
+                                  {(() => {
+                                    const now = new Date();
+                                    let daysUntilExpiry = 0;
+                                    
+                                    if (listing.expiresAt) {
+                                      const expiresAt = new Date(listing.expiresAt);
+                                      daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                    } else {
+                                      // Calculate from creation date if no expiry date
+                                      const createdAt = new Date(listing.createdAt);
+                                      const thirtyDaysFromCreation = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000);
+                                      daysUntilExpiry = Math.ceil((thirtyDaysFromCreation.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                    }
+                                    
+                                    if (daysUntilExpiry <= 0) {
+                                      return 'EXPIRED';
+                                    }
+                                    return listing.status;
+                                  })()}
                                 </span>
-                              )}
+                                {listing.isFeatured && (
+                                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
+                                    ⭐ Featured
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Days Remaining Countdown - Fixed height */}
+                            <div className="h-6 mb-4 flex items-center">
+                              {(() => {
+                                if (!listing.expiresAt) {
+                                  // For listings without expiry date, show "No expiry" or calculate from creation date
+                                  const createdAt = new Date(listing.createdAt);
+                                  const thirtyDaysFromCreation = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000);
+                                  const now = new Date();
+                                  const daysUntilExpiry = Math.ceil((thirtyDaysFromCreation.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                  
+                                  if (daysUntilExpiry <= 0) {
+                                    return (
+                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        ⏰ EXPIRED
+                                      </span>
+                                    );
+                                  } else if (daysUntilExpiry <= 5) {
+                                    return (
+                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                        ⏰ {daysUntilExpiry} days left
+                                      </span>
+                                    );
+                                  } else if (daysUntilExpiry <= 10) {
+                                    return (
+                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        ⏰ {daysUntilExpiry} days left
+                                      </span>
+                                    );
+                                  } else {
+                                    return (
+                                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        ⏰ {daysUntilExpiry} days left
+                                      </span>
+                                    );
+                                  }
+                                }
+                                
+                                const now = new Date();
+                                const expiresAt = new Date(listing.expiresAt);
+                                const daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                
+                                if (daysUntilExpiry <= 0) {
+                                  return (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                      ⏰ EXPIRED
+                                    </span>
+                                  );
+                                } else if (daysUntilExpiry <= 5) {
+                                  return (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                      ⏰ {daysUntilExpiry} days left
+                                    </span>
+                                  );
+                                } else if (daysUntilExpiry <= 10) {
+                                  return (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                      ⏰ {daysUntilExpiry} days left
+                                    </span>
+                                  );
+                                } else {
+                                  return (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                      ⏰ {daysUntilExpiry} days left
+                                    </span>
+                                  );
+                                }
+                              })()}
                             </div>
                           </div>
 
                           {/* Actions */}
-                  <div className="flex items-center gap-2">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      listing.status === 'APPROVED' 
-                        ? 'bg-green-100 text-green-800' 
-                        : listing.status === 'PENDING'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {listing.status}
-                    </span>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => router.push(`/listings/${listing.id}`)}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => router.push(`/listings/${listing.id}/edit`)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteListing(listing.id)}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
+                          <div className="flex flex-col sm:flex-row lg:flex-col gap-2 flex-shrink-0 mt-auto">
+                            <div className="flex gap-1 sm:gap-2">
+                              <button
+                                onClick={() => router.push(`/listings/${listing.id}`)}
+                                className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs sm:text-sm text-gray-700 dark:text-gray-300"
+                              >
+                                View
+                              </button>
+                              <button
+                                onClick={() => router.push(`/listings/${listing.id}/edit`)}
+                                className="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
+                              >
+                                Edit
+                              </button>
+                              {(() => {
+                                if (!listing.expiresAt) return null;
+                                const now = new Date();
+                                const expiresAt = new Date(listing.expiresAt);
+                                const daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                if (daysUntilExpiry > 0) {
+                                  return (
+                                    <button
+                                      onClick={() => handleRenewListing(listing.id)}
+                                      className="px-2 py-1 sm:px-4 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm"
+                                    >
+                                      Renew
+                                    </button>
+                                  );
+                                }
+                                return null;
+                              })()}
+                              <button
+                                onClick={() => handleDeleteListing(listing.id)}
+                                className="px-2 py-1 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs sm:text-sm"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -289,7 +447,8 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
           </div>
         </div>
       </div>
-    </Container>
+      </Container>
+    </div>
   );
 };
 

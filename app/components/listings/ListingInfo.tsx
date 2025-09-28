@@ -58,16 +58,21 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
          <div className="flex flex-col gap-2">
             <div className="flex justify-between items-start">
                <div className="flex flex-col gap-1">
-                  <div className="text-2xl font-bold text-gray-900">{listing.title}</div>
-                  <div className="text-sm text-gray-600">
-                     Posted on {formatDate(listing.createdAt)}, {listing.city}, {listing.district}
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white">{listing.title}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                     Posted on {formatDate(listing.createdAt)}
+                  </div>
+                  {/* Always show location */}
+                  <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                     <span>📍</span>
+                     <span>{listing.city}, {listing.district}</span>
                   </div>
                </div>
                <div className="flex gap-2">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300">
                      Share
                   </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300">
                      Save ad
                   </button>
                </div>
@@ -75,16 +80,16 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
          </div>
 
          {/* Price Section */}
-         <div className="bg-gray-50 p-6 rounded-xl">
+         <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl">
             <div className="flex items-center gap-4">
-               <div className="text-3xl font-bold text-gray-900">
+               <div className="text-3xl font-bold text-gray-900 dark:text-white">
                   {formatPrice(listing.price)}
                </div>
-               <div className="text-lg text-gray-600">
+               <div className="text-lg text-gray-600 dark:text-gray-300">
                   {listing.priceUnit}
                </div>
                {listing.isNegotiable && (
-                  <div className="text-sm text-gray-500 bg-gray-200 px-3 py-1 rounded-full">
+                  <div className="text-sm text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
                      Negotiable
                   </div>
                )}
@@ -92,39 +97,51 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
          </div>
 
          {/* Vehicle/Property Details */}
-         <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Details</h3>
+         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Details</h3>
             
             {listing.mainCategory === 'VEHICLE' && listing.vehicleAttributes && (
                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Brand</span>
-                     <span className="font-medium">{(listing.vehicleAttributes as any).brand}</span>
+                  {(listing.vehicleAttributes as any).brand && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Brand</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).brand}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Model</span>
-                     <span className="font-medium">{(listing.vehicleAttributes as any).model}</span>
+                  )}
+                  {(listing.vehicleAttributes as any).model && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Model</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).model}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Year</span>
-                     <span className="font-medium">{(listing.vehicleAttributes as any).year}</span>
+                  )}
+                  {(listing.vehicleAttributes as any).year && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Year</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).year}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Transmission</span>
-                     <span className="font-medium">{(listing.vehicleAttributes as any).transmission}</span>
+                  )}
+                  {(listing.vehicleAttributes as any).transmission && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Transmission</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).transmission}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Fuel Type</span>
-                     <span className="font-medium">{(listing.vehicleAttributes as any).fuelType}</span>
+                  )}
+                  {(listing.vehicleAttributes as any).fuelType && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Fuel Type</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).fuelType}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Seats</span>
-                     <span className="font-medium">{(listing.vehicleAttributes as any).seats}</span>
+                  )}
+                  {(listing.vehicleAttributes as any).seats && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Seats</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).seats}</span>
                   </div>
+                  )}
                   {(listing.vehicleAttributes as any).mileage && (
-                     <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-gray-600">Mileage</span>
-                        <span className="font-medium">{(listing.vehicleAttributes as any).mileage} km</span>
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Mileage</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.vehicleAttributes as any).mileage} km</span>
                      </div>
                   )}
                </div>
@@ -132,66 +149,148 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
 
             {listing.mainCategory === 'PROPERTY' && listing.propertyAttributes && (
                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Property Type</span>
-                     <span className="font-medium">{(listing.propertyAttributes as any).propertyType}</span>
+                  {(listing.propertyAttributes as any).propertyType && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Property Type</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).propertyType}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).propertySize && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Property Size</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).propertySize} sq ft</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).landSize && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Land Size</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).landSize} perches</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).bedrooms && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Bedrooms</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).bedrooms}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).bathrooms && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Bathrooms</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).bathrooms}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).furnished && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Furnished</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).furnished}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).parking && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Parking</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).parking}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).security && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Security</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).security}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).floor && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Floor</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).floor}</span>
+                     </div>
+                  )}
+                  {(listing.propertyAttributes as any).address && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Address</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.propertyAttributes as any).address}</span>
+                     </div>
+                  )}
+               </div>
+            )}
+
+            {listing.mainCategory === 'EXPERIENCE' && listing.experienceAttributes && (
+               <div className="grid grid-cols-2 gap-4">
+                  {(listing.experienceAttributes as any).experienceType && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Experience Type</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.experienceAttributes as any).experienceType}</span>
+                     </div>
+                  )}
+                  {(listing.experienceAttributes as any).duration && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Duration</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.experienceAttributes as any).duration} hours</span>
+                     </div>
+                  )}
+                  {(listing.experienceAttributes as any).maxParticipants && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Max Participants</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.experienceAttributes as any).maxParticipants} people</span>
+                     </div>
+                  )}
+                  {(listing.experienceAttributes as any).minAge && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Minimum Age</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.experienceAttributes as any).minAge} years</span>
+                     </div>
+                  )}
+                  {(listing.experienceAttributes as any).difficultyLevel && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Difficulty Level</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.experienceAttributes as any).difficultyLevel}</span>
+                     </div>
+                  )}
+                  {(listing.experienceAttributes as any).languages && (listing.experienceAttributes as any).languages.length > 0 && (
+                     <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400">Languages</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{(listing.experienceAttributes as any).languages.join(', ')}</span>
+                     </div>
+                  )}
+                  {(listing.experienceAttributes as any).includes && (listing.experienceAttributes as any).includes.length > 0 && (
+                     <div className="col-span-2 py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400 block mb-2">What's Included</span>
+                        <div className="flex flex-wrap gap-2">
+                           {(listing.experienceAttributes as any).includes.map((item: string, index: number) => (
+                              <span key={index} className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full text-sm">
+                                 {item}
+                              </span>
+                           ))}
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Bedrooms</span>
-                     <span className="font-medium">{(listing.propertyAttributes as any).bedrooms}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Bathrooms</span>
-                     <span className="font-medium">{(listing.propertyAttributes as any).bathrooms}</span>
+                  )}
+                  {(listing.experienceAttributes as any).requirements && (listing.experienceAttributes as any).requirements.length > 0 && (
+                     <div className="col-span-2 py-2 border-b border-gray-100 dark:border-gray-700">
+                        <span className="text-gray-600 dark:text-gray-400 block mb-2">Requirements</span>
+                        <div className="flex flex-wrap gap-2">
+                           {(listing.experienceAttributes as any).requirements.map((item: string, index: number) => (
+                              <span key={index} className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-2 py-1 rounded-full text-sm">
+                                 {item}
+                              </span>
+                           ))}
                   </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                     <span className="text-gray-600">Furnished</span>
-                     <span className="font-medium">{(listing.propertyAttributes as any).isFurnished ? 'Yes' : 'No'}</span>
                   </div>
+                  )}
                </div>
             )}
          </div>
 
          {/* Description */}
-         <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Description</h3>
-            <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Description</h3>
+            <div className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                {description}
             </div>
          </div>
 
-         {/* Contact Information */}
-         <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Contact Information</h3>
-            <div className="flex items-center gap-4">
-               <Avatar src={user?.image} />
-               <div className="flex flex-col">
-                  <div className="font-semibold text-gray-900">{user?.name}</div>
-                  <div className="text-sm text-gray-600">4Rent Member</div>
-               </div>
-            </div>
-            <div className="mt-4 flex gap-3">
-               <a 
-                  href={`tel:${listing.contactPhone}`}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-               >
-                  📞 Call
-               </a>
-               <a 
-                  href={`https://wa.me/94${listing.whatsappNumber?.replace(/^0/, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-               >
-                  💬 WhatsApp
-               </a>
-            </div>
-         </div>
 
-         {/* Location */}
-         <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Location</h3>
-            <div className="flex items-center gap-2 text-lg text-gray-700">
+         {/* Location - Always show */}
+         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Location</h3>
+            <div className="flex items-center gap-2 text-lg text-gray-700 dark:text-gray-300">
                <span className="text-2xl">📍</span>
                <span className="font-medium">{locationValue}</span>
             </div>

@@ -32,12 +32,14 @@ const ListingHead: React.FC<ListingHeadProps> = ({
    return (
       <div className="space-y-4">
          {/* Main Image */}
-         <div className="w-full h-[60vh] overflow-hidden rounded-xl relative group">
+         <div className="w-full h-[50vh] overflow-hidden rounded-xl relative group bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
             <Image 
                alt={title} 
                src={images[currentImageIndex]} 
                fill 
-               className="object-cover w-full" 
+               className="object-contain w-full h-full" 
+               quality={100}
+               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             
             {/* Navigation Arrows */}
@@ -45,13 +47,13 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                <>
                   <button
                      onClick={prevImage}
-                     className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                     className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 dark:text-white"
                   >
                      ←
                   </button>
                   <button
                      onClick={nextImage}
-                     className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                     className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 dark:text-white"
                   >
                      →
                   </button>
@@ -78,18 +80,20 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                   <button
                      key={index}
                      onClick={() => setCurrentImageIndex(index)}
-                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
+                     className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors bg-gray-100 dark:bg-gray-700 flex items-center justify-center ${
                         currentImageIndex === index 
-                           ? 'border-blue-500' 
-                           : 'border-gray-200 hover:border-gray-300'
+                           ? 'border-blue-500 dark:border-blue-400' 
+                           : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
                      }`}
                   >
                      <Image
                         alt={`${title} ${index + 1}`}
                         src={image}
-                        width={80}
-                        height={80}
-                        className="object-cover w-full h-full"
+                        width={64}
+                        height={64}
+                        className="object-contain w-full h-full"
+                        quality={100}
+                        sizes="64px"
                      />
                   </button>
                ))}

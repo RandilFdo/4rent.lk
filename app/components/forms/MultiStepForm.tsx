@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { IoChevronBack, IoChevronForward } from "@react-icons/all-files/io5/IoChevronBack";
-import { IoChevronForward as IoChevronForwardIcon } from "@react-icons/all-files/io5/IoChevronForward";
+import { IoChevronBack } from "@react-icons/all-files/io5/IoChevronBack";
+import { IoChevronForward } from "@react-icons/all-files/io5/IoChevronForward";
 
 interface Step {
   id: string;
@@ -77,7 +77,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
       <div className="flex justify-between mt-8">
         <button
           onClick={isFirstStep ? onCancel : prevStep}
-          className="flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-white"
           disabled={isLoading}
         >
           <IoChevronBack size={20} />
@@ -90,7 +90,7 @@ const MultiStepForm: React.FC<MultiStepFormProps> = ({
           className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLastStep ? submitLabel : "Next"}
-          {!isLastStep && <IoChevronForwardIcon size={20} />}
+          {!isLastStep && <IoChevronForward size={20} />}
         </button>
       </div>
     </div>

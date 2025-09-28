@@ -93,9 +93,9 @@ const BikePostPage = () => {
   };
 
   return (
-    <div className="pt-8 pb-12 bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
       <Container>
-        <div className="text-center mb-4">
+        <div className="text-center pt-32 mb-4">
           <Heading
             title="List Your Bike for Rent"
             subtitle="Fill in the details below to create your listing"

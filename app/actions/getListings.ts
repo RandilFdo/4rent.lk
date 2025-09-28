@@ -1,5 +1,5 @@
 import prisma from "@/app/libs/prismadb";
-import { MainCategory, VehicleType, PropertyType } from "@/app/types";
+import { MainCategory, VehicleType, PropertyType, ExperienceType } from "@/app/types";
 
 export interface IListingParams {
    userId?: string;
@@ -14,6 +14,9 @@ export interface IListingParams {
    propertyType?: PropertyType;
    bedrooms?: number;
    bathrooms?: number;
+   experienceType?: ExperienceType;
+   maxParticipants?: number;
+   difficultyLevel?: string;
    locationValue?: string;
    category?: string; // Legacy support
    guestCount?: number; // Legacy support
@@ -38,6 +41,9 @@ export default async function getListings(params: IListingParams) {
          propertyType,
          bedrooms,
          bathrooms,
+         experienceType,
+         maxParticipants,
+         difficultyLevel,
          // Legacy parameters
          locationValue,
          category,
@@ -51,6 +57,16 @@ export default async function getListings(params: IListingParams) {
       let query: any = {
          status: "APPROVED", // Only show approved listings
       };
+
+      // Temporarily disable expiry filter to debug
+      // TODO: Re-enable after fixing the issue
+      // if (!userId) {
+      //    const now = new Date();
+      //    query.OR = [
+      //       { expiresAt: null },
+      //       { expiresAt: { gt: now } }
+      //    ];
+      // }
 
       // User filter
       if (userId) {
@@ -120,6 +136,8 @@ export default async function getListings(params: IListingParams) {
          };
       }
 
+      console.log('Database query:', JSON.stringify(query, null, 2));
+      
       const listings = await prisma.listing.findMany({
          where: query,
          orderBy: [
@@ -127,6 +145,8 @@ export default async function getListings(params: IListingParams) {
             { createdAt: "desc" }
          ],
       });
+      
+      console.log('Found listings:', listings.length);
 
       // Filter by JSON attributes at application level
       let filteredListings = listings;
@@ -157,7 +177,16 @@ export default async function getListings(params: IListingParams) {
                   (property.propertyType && property.propertyType.toLowerCase().includes(searchTerm));
             }
             
-            return titleMatch || descriptionMatch || vehicleMatch || propertyMatch;
+            // Search in experience attributes
+            let experienceMatch = false;
+            if (listing.experienceAttributes) {
+               const experience = listing.experienceAttributes as any;
+               experienceMatch = 
+                  (experience.experienceType && experience.experienceType.toLowerCase().includes(searchTerm)) ||
+                  (experience.languages && experience.languages.some((lang: string) => lang.toLowerCase().includes(searchTerm)));
+            }
+            
+            return titleMatch || descriptionMatch || vehicleMatch || propertyMatch || experienceMatch;
          });
       }
 
@@ -190,6 +219,25 @@ export default async function getListings(params: IListingParams) {
             if (bathrooms && listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
                if (property.bathrooms < bathrooms) return false;
+            }
+            return true;
+         });
+      }
+
+      // Experience-specific filters
+      if (mainCategory === "EXPERIENCE") {
+         filteredListings = filteredListings.filter((listing) => {
+            if (experienceType && listing.experienceAttributes) {
+               const experience = listing.experienceAttributes as any;
+               if (experience.experienceType !== experienceType) return false;
+            }
+            if (maxParticipants && listing.experienceAttributes) {
+               const experience = listing.experienceAttributes as any;
+               if (experience.maxParticipants < maxParticipants) return false;
+            }
+            if (difficultyLevel && listing.experienceAttributes) {
+               const experience = listing.experienceAttributes as any;
+               if (experience.difficultyLevel !== difficultyLevel) return false;
             }
             return true;
          });
@@ -228,126 +276,16 @@ export default async function getListings(params: IListingParams) {
          ...listing,
          createdAt: listing.createdAt.toISOString(),
          updatedAt: listing.updatedAt.toISOString(),
+         expiresAt: listing.expiresAt ? listing.expiresAt.toISOString() : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // Default to 30 days from now if not set
+         lastRenewedAt: listing.lastRenewedAt ? listing.lastRenewedAt.toISOString() : undefined,
          vehicleAttributes: listing.vehicleAttributes as any,
          propertyAttributes: listing.propertyAttributes as any,
+         experienceAttributes: listing.experienceAttributes as any,
       }));
 
       return safeListings;
    } catch (error: any) {
       console.error('Error fetching listings:', error);
-      // Return sample data when database is down
-      return [
-         {
-            id: "sample-1",
-            title: "Toyota Corolla 2020",
-            description: "Well maintained car for rent. Perfect for city driving.",
-            images: ["/images/placeholder.jpg"],
-            mainCategory: "VEHICLE",
-            subCategory: "car",
-            district: "Colombo",
-            city: "Colombo 03",
-            address: "123 Main Street",
-            price: 5000,
-            priceUnit: "per day",
-            isNegotiable: true,
-            contactPhone: "+94771234567",
-            whatsappNumber: "+94771234567",
-            status: "APPROVED",
-            isFeatured: false,
-            adminNotes: null,
-            viewCount: 0,
-            userId: "sample-user",
-            vehicleAttributes: {
-               vehicleType: "CAR" as any,
-               brand: "Toyota",
-               model: "Corolla",
-               year: 2020,
-               transmission: "AUTO" as any,
-               fuelType: "PETROL" as any,
-               seats: 5,
-               mileage: 50000
-            },
-            propertyAttributes: undefined,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            user: {
-               name: "Sample User",
-               image: null
-            }
-         },
-         {
-            id: "sample-2",
-            title: "Modern Apartment in Kandy",
-            description: "Beautiful 2 bedroom apartment with city views.",
-            images: ["/images/placeholder.jpg"],
-            mainCategory: "PROPERTY",
-            subCategory: "apartment",
-            district: "Kandy",
-            city: "Kandy",
-            address: "456 Hill Street",
-            price: 50000,
-            priceUnit: "per month",
-            isNegotiable: false,
-            contactPhone: "+94771234568",
-            whatsappNumber: "+94771234568",
-            status: "APPROVED",
-            isFeatured: true,
-            adminNotes: null,
-            viewCount: 0,
-            userId: "sample-user-2",
-            vehicleAttributes: undefined,
-            propertyAttributes: {
-               propertyType: "APARTMENT" as any,
-               bedrooms: 2,
-               bathrooms: 2,
-               isFurnished: true,
-               size: 1200
-            },
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            user: {
-               name: "Property Owner",
-               image: null
-            }
-         },
-         {
-            id: "sample-3",
-            title: "Honda Civic 2019",
-            description: "Reliable and fuel-efficient car for daily use.",
-            images: ["/images/placeholder.jpg"],
-            mainCategory: "VEHICLE",
-            subCategory: "car",
-            district: "Gampaha",
-            city: "Negombo",
-            address: "789 Beach Road",
-            price: 4500,
-            priceUnit: "per day",
-            isNegotiable: true,
-            contactPhone: "+94771234569",
-            whatsappNumber: "+94771234569",
-            status: "APPROVED",
-            isFeatured: false,
-            adminNotes: null,
-            viewCount: 0,
-            userId: "sample-user-3",
-            vehicleAttributes: {
-               vehicleType: "CAR" as any,
-               brand: "Honda",
-               model: "Civic",
-               year: 2019,
-               transmission: "AUTO" as any,
-               fuelType: "PETROL" as any,
-               seats: 5,
-               mileage: 35000
-            },
-            propertyAttributes: undefined,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            user: {
-               name: "Car Owner",
-               image: null
-            }
-         }
-      ] as any;
+      return [];
    }
 }

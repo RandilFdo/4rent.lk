@@ -1,5 +1,5 @@
 "use client";
-import { SafeListing, SafeReservation, SafeUser, VehicleAttributes, PropertyAttributes } from "@/app/types";
+import { SafeListing, SafeReservation, SafeUser, VehicleAttributes, PropertyAttributes, ExperienceAttributes } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { format } from "date-fns";
@@ -83,21 +83,30 @@ const ListingCard: React.FC<ListingCardProps> = ({
             details: property.isFurnished ? "Furnished" : "Unfurnished",
             specs: `${property.bedrooms} bed • ${property.bathrooms} bath`
          };
+      } else if (data.mainCategory === "EXPERIENCE" && data.experienceAttributes) {
+         const experience = data.experienceAttributes as ExperienceAttributes;
+         const experienceType = experience.experienceType.replace(/_/g, ' ').toLowerCase();
+         return {
+            icon: "🎯",
+            type: `${experienceType}4rent`,
+            details: `${experience.duration}h • ${experience.difficultyLevel.toLowerCase()}`,
+            specs: `Max ${experience.maxParticipants} people • Age ${experience.minAge || 0}+`
+         };
       }
       return {
-         icon: data.mainCategory === "VEHICLE" ? "🚗" : "🏠",
-         type: data.mainCategory === "VEHICLE" ? "vehicle4rent" : "property4rent",
+         icon: data.mainCategory === "VEHICLE" ? "🚗" : data.mainCategory === "PROPERTY" ? "🏠" : "🎯",
+         type: data.mainCategory === "VEHICLE" ? "vehicle4rent" : data.mainCategory === "PROPERTY" ? "property4rent" : "experience4rent",
          details: "",
          specs: ""
       };
-   }, [data.mainCategory, data.vehicleAttributes, data.propertyAttributes]);
+   }, [data.mainCategory, data.vehicleAttributes, data.propertyAttributes, data.experienceAttributes]);
 
    return (
       <div
          onClick={() => router.push(`/listings/${data.id}`)}
          className="col-span-1 cursor-pointer group"
       >
-         <div className="flex flex-col h-full bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                 <div className="flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg overflow-hidden card-hover">
             <div className="aspect-square w-full relative overflow-hidden">
                <Image
                   alt="Listing"
@@ -105,43 +114,45 @@ const ListingCard: React.FC<ListingCardProps> = ({
                   className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-200"
                   fill
                />
-               <div className="absolute top-3 right-3">
+               <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
                   <HeartButton listingId={data.id} currentUser={currentUser} />
                </div>
                {data.isFeatured && (
-                  <div className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 sm:px-3 rounded-full text-xs font-bold shadow-lg">
                      ⭐ Featured
                   </div>
                )}
             </div>
             
-            <div className="flex flex-col flex-grow p-4 space-y-3 min-h-[120px]">
+            <div className="flex flex-col flex-grow p-3 sm:p-4 space-y-2 sm:space-y-3 min-h-[100px] sm:min-h-[120px]">
                {/* Title */}
-               <div className="flex items-center gap-2">
-                  <span className="text-lg">{getCategoryInfo.icon}</span>
-                  <h3 className="font-bold text-lg truncate gradient-text">{data.title}</h3>
+               <div className="flex items-center gap-1 sm:gap-2">
+                  <span className="text-sm sm:text-lg">{getCategoryInfo.icon}</span>
+                  <h3 className="font-bold text-sm sm:text-lg truncate gradient-text dark:text-white">{data.title}</h3>
                </div>
                
                {/* Location */}
-               <div className="font-medium text-gray-600 flex items-center gap-1">
-                  <span className="text-sm">📍</span>
-                  {data.city && data.district 
-                    ? `${data.city.charAt(0).toUpperCase() + data.city.slice(1).toLowerCase()}, ${data.district.charAt(0).toUpperCase() + data.district.slice(1).toLowerCase()}`
-                    : `${data.city || ''}, ${data.district || ''}`
-                  }
+               <div className="font-medium text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                  <span className="text-xs sm:text-sm">📍</span>
+                  <span className="text-xs sm:text-sm truncate">
+                     {data.city && data.district 
+                       ? `${data.city.charAt(0).toUpperCase() + data.city.slice(1).toLowerCase()}, ${data.district.charAt(0).toUpperCase() + data.district.slice(1).toLowerCase()}`
+                       : `${data.city || ''}, ${data.district || ''}`
+                     }
+                  </span>
                </div>
                
                {/* Category */}
-               <div className="text-sm text-gray-700 capitalize font-medium">
+               <div className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 capitalize font-medium truncate">
                   {getCategoryInfo.type}
                </div>
                
                {/* Price - positioned at bottom */}
-               <div className="mt-auto pt-2">
-                  <div className="font-bold text-xl gradient-text">
+               <div className="mt-auto pt-1 sm:pt-2">
+                  <div className="font-bold text-lg sm:text-xl gradient-text dark:text-white">
                      LKR {price?.toLocaleString()}
                   </div>
-                  <div className="font-medium text-sm text-gray-500">
+                  <div className="font-medium text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                      {data.priceUnit || 'per day'}
                   </div>
                </div>

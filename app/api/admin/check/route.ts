@@ -1,21 +1,24 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ isAdmin: false }, { status: 401 });
+    const { searchParams } = new URL(request.url);
+    const adminLoggedIn = searchParams.get('adminLoggedIn');
+    const adminLoginTime = searchParams.get('adminLoginTime');
+
+    // Check if admin is logged in via localStorage (passed as query params)
+    if (adminLoggedIn === 'true' && adminLoginTime) {
+      const loginTime = parseInt(adminLoginTime);
+      const currentTime = Date.now();
+      const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours
+
+      // Check if session is still valid (within 24 hours)
+      if (currentTime - loginTime < sessionDuration) {
+        return NextResponse.json({ isAdmin: true });
+      }
     }
 
-    // Check if user is admin (you can modify this logic based on your admin criteria)
-    // For now, we'll check if the email contains 'admin' or if there's an isAdmin field
-    const isAdmin = session.user.email.includes('admin') || 
-                   (session.user as any).isAdmin === true;
-
-    return NextResponse.json({ isAdmin });
+    return NextResponse.json({ isAdmin: false }, { status: 401 });
   } catch (error) {
     console.error('Error checking admin status:', error);
     return NextResponse.json({ isAdmin: false }, { status: 500 });

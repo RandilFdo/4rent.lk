@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Container from "../../components/Container";
 import Heading from "../../components/Heading";
@@ -9,92 +8,96 @@ import Input from "../../components/inputs/Input";
 import Button from "../../components/Button";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const router = useRouter();
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: ""
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     setError("");
 
-    try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
+    // Hardcoded admin credentials
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "admin123";
 
-      if (result?.error) {
-        setError("Invalid credentials");
-      } else {
-        // Check if user is admin
-        const session = await getSession();
-        const isAdmin = session?.user?.email?.includes('admin') || 
-                       (session?.user as any)?.isAdmin === true;
-        
-        if (isAdmin) {
-          router.push("/admin");
-        } else {
-          setError("Access denied. Admin privileges required.");
-        }
-      }
-    } catch (error) {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
+    if (credentials.username === ADMIN_USERNAME && credentials.password === ADMIN_PASSWORD) {
+      // Store admin session in localStorage
+      localStorage.setItem("adminLoggedIn", "true");
+      localStorage.setItem("adminLoginTime", Date.now().toString());
+      
+      // Also set cookies for server-side protection
+      document.cookie = `adminLoggedIn=true; path=/; max-age=${24 * 60 * 60}`; // 24 hours
+      document.cookie = `adminLoginTime=${Date.now()}; path=/; max-age=${24 * 60 * 60}`; // 24 hours
+      
+      router.push("/admin");
+    } else {
+      setError("Invalid username or password");
     }
+
+    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
       <Container>
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <Heading
-              title="Admin Login"
-              subtitle="Enter your admin credentials to access the dashboard"
-            />
-          </div>
-          
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
+            <div className="text-center mb-8">
+              <div className="text-6xl mb-4">🔐</div>
+              <Heading 
+                title="Admin Login" 
+                subtitle="Enter your admin credentials to access the dashboard"
+              />
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <Input
-                label="Email Address"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                id="username"
+                label="Username"
+                value={credentials.username}
+                onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
+                disabled={isLoading}
                 required
               />
-              
+
               <Input
+                id="password"
                 label="Password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                value={credentials.password}
+                onChange={(e) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
+                disabled={isLoading}
                 required
               />
-            </div>
 
-            {error && (
-              <div className="text-red-600 text-sm text-center">
-                {error}
-              </div>
-            )}
+              {error && (
+                <div className="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
 
-            <div>
               <Button
-                label={loading ? "Signing in..." : "Sign In"}
+                label={isLoading ? "Signing In..." : "Sign In"}
                 onClick={handleSubmit}
-                disabled={loading}
-                className="w-full"
+                disabled={isLoading}
+                fullWidth
               />
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Demo Credentials: <br />
+                <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                  admin / admin123
+                </span>
+              </p>
             </div>
-          </form>
+          </div>
         </div>
       </Container>
     </div>

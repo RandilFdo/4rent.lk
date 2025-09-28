@@ -1,6 +1,5 @@
 "use client";
 import axios from "axios";
-import { AiFillGithub } from "@react-icons/all-files/ai/AiFillGithub";
 import { FcGoogle } from "@react-icons/all-files/fc/FcGoogle";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -36,9 +35,23 @@ const RegisterModal = () => {
       axios
          .post("/api/register", data)
          .then(() => {
-            registerModal.onClose();
-            loginModal.onOpen();
-            toast.success("Successfully registered");
+            // Automatically log in the user after successful registration
+            signIn("credentials", {
+               email: data.email,
+               password: data.password,
+               redirect: false,
+            }).then((callback) => {
+               if (callback?.ok) {
+                  registerModal.onClose();
+                  toast.success("Successfully registered and logged in!");
+                  window.location.reload(); // Refresh to update the UI
+               } else {
+                  // If auto-login fails, show login modal
+                  registerModal.onClose();
+                  loginModal.onOpen();
+                  toast.success("Successfully registered! Please log in.");
+               }
+            });
          })
          .catch((error) => {
             toast.error("Something Went Wrong");
@@ -56,8 +69,8 @@ const RegisterModal = () => {
    const bodyContent = (
       <div className="flex flex-col gap-4">
          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Join 4Rent</h2>
-            <p className="text-gray-600">Create your account to start renting</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Join 4Rent</h2>
+            <p className="text-gray-600 dark:text-gray-400">Create your account to start renting</p>
          </div>
          <Input
             id="name"
@@ -91,10 +104,10 @@ const RegisterModal = () => {
       <div className="flex flex-col gap-4 mt-6">
          <div className="relative">
             <div className="absolute inset-0 flex items-center">
-               <div className="w-full border-t border-gray-300" />
+               <div className="w-full border-t border-gray-300 dark:border-gray-600" />
             </div>
             <div className="relative flex justify-center text-sm">
-               <span className="px-2 bg-white text-gray-500">Or continue with</span>
+               <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
             </div>
          </div>
          <Button
@@ -103,19 +116,13 @@ const RegisterModal = () => {
             icon={FcGoogle}
             onClick={() => signIn("google")}
          />
-         <Button
-            outline
-            label="Continue with Github"
-            icon={AiFillGithub}
-            onClick={() => signIn("github")}
-         />
          <div className="text-center mt-4">
-            <span className="text-gray-600">Already have an account? </span>
+            <span className="text-gray-600 dark:text-gray-400">Already have an account? </span>
             <button
-               className="text-blue-600 hover:text-blue-500 font-medium"
+               className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
                onClick={onToggle}
             >
-               Sign in
+               Log in
             </button>
          </div>
       </div>

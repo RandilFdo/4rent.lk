@@ -71,35 +71,35 @@ const VehiclePostPage = () => {
   };
 
   return (
-    <div className="pt-24 pb-12 bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
       <Container>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center pt-32 mb-8 sm:mb-12">
             <Heading
               title="What type of vehicle are you renting?"
               subtitle="Select the vehicle type to continue"
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {vehicleTypes.map((vehicle) => (
               <div
                 key={vehicle.type}
                 onClick={() => handleTypeSelect(vehicle.type)}
-                className={`bg-white rounded-2xl p-6 shadow-lg cursor-pointer group card-hover ${
+                className={`bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg cursor-pointer group card-hover ${
                   selectedType === vehicle.type 
-                    ? 'ring-2 ring-purple-500 bg-white border-2 border-purple-300' 
-                    : 'hover:ring-2 hover:ring-purple-200'
+                    ? 'ring-2 ring-purple-500 dark:ring-purple-400 bg-white dark:bg-gray-700 border-2 border-purple-300 dark:border-purple-500' 
+                    : 'hover:ring-2 hover:ring-purple-200 dark:hover:ring-purple-600'
                 }`}
               >
                 <div className="text-center">
-                  <div className="text-5xl mb-4 group-hover:scale-105 transition-transform duration-200">
+                  <div className="text-4xl sm:text-5xl mb-3 sm:mb-4 group-hover:scale-105 transition-transform duration-200">
                     {vehicle.icon}
                   </div>
-                  <h3 className="text-xl font-bold gradient-text mb-2">
+                  <h3 className="text-lg sm:text-xl font-bold gradient-text dark:text-white mb-2">
                     {vehicle.label}
                   </h3>
-                  <p className="text-gray-600 mb-3">
+                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-3">
                     {vehicle.description}
                   </p>
                 </div>
