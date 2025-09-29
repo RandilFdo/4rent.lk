@@ -7,37 +7,5 @@
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
-  },
-  "env": {
-    "NEXTAUTH_URL": "@nextauth_url",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "DATABASE_URL": "@database_url",
-    "GITHUB_ID": "@github_id",
-    "GITHUB_SECRET": "@github_secret",
-    "GOOGLE_CLIENT_ID": "@google_client_id",
-    "GOOGLE_CLIENT_SECRET": "@google_client_secret",
-    "PAYHERE_MERCHANT_ID": "@payhere_merchant_id",
-    "PAYHERE_MERCHANT_SECRET": "@payhere_merchant_secret",
-    "PAYHERE_BASE_URL": "@payhere_base_url",
-    "SENDGRID_API_KEY": "@sendgrid_api_key",
-    "SENDGRID_FROM_EMAIL": "@sendgrid_from_email",
-    "CRON_SECRET": "@cron_secret"
-  },
-  "build": {
-    "env": {
-      "NEXTAUTH_URL": "@nextauth_url",
-      "NEXTAUTH_SECRET": "@nextauth_secret",
-      "DATABASE_URL": "@database_url",
-      "GITHUB_ID": "@github_id",
-      "GITHUB_SECRET": "@github_secret",
-      "GOOGLE_CLIENT_ID": "@google_client_id",
-      "GOOGLE_CLIENT_SECRET": "@google_client_secret",
-      "PAYHERE_MERCHANT_ID": "@payhere_merchant_id",
-      "PAYHERE_MERCHANT_SECRET": "@payhere_merchant_secret",
-      "PAYHERE_BASE_URL": "@payhere_base_url",
-      "SENDGRID_API_KEY": "@sendgrid_api_key",
-      "SENDGRID_FROM_EMAIL": "@sendgrid_from_email",
-      "CRON_SECRET": "@cron_secret"
-    }
   }
 }
