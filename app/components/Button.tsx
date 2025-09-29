@@ -10,6 +10,8 @@ interface ButtonProps {
    small?: boolean;
    icon?: IconType;
    className?: string;
+   fullWidth?: boolean;
+   type?: "button" | "submit" | "reset";
 }
 const Button: React.FC<ButtonProps> = ({
    label,
@@ -19,9 +21,12 @@ const Button: React.FC<ButtonProps> = ({
    small,
    icon: Icon,
    className = "",
+   fullWidth = true,
+   type = "button",
 }) => {
    return (
       <button
+         type={type}
          onClick={onClick}
          disabled={disabled}
          className={`
@@ -38,6 +43,7 @@ const Button: React.FC<ButtonProps> = ({
       : "btn-gradient text-white border-0 shadow-lg hover:shadow-xl"
     }
     ${small ? "py-1.5 sm:py-2 px-3 sm:px-4 text-xs sm:text-sm" : "py-2 sm:py-3 px-4 sm:px-6 text-sm sm:text-md"}
+    ${fullWidth ? "w-full" : ""}
     ${className}
    `}
       >

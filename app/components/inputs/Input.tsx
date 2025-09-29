@@ -15,6 +15,7 @@ interface InputProps {
    placeholder?: string;
    register?: UseFormRegister<FieldValues>;
    errors?: FieldErrors<FieldValues>;
+   min?: string;
 }
 const Input: React.FC<InputProps> = ({
    id,
@@ -28,6 +29,7 @@ const Input: React.FC<InputProps> = ({
    placeholder,
    register,
    errors,
+   min,
 }) => {
    return (
       <div className="w-full">
@@ -42,6 +44,7 @@ const Input: React.FC<InputProps> = ({
                placeholder={placeholder}
                type={type}
                required={required}
+               min={min}
                {...(register && id ? register(id, { required }) : { value, onChange })}
                className={`w-full p-3 sm:p-4 font-light bg-white dark:bg-gray-700 border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed text-sm sm:text-base text-gray-900 dark:text-white ${
                   formatPrice ? "pl-7 sm:pl-9" : "pl-3 sm:pl-4"

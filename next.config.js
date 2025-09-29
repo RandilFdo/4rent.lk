@@ -22,6 +22,17 @@ const nextConfig = {
 
       return config;
    },
+   // Production optimizations
+   output: 'standalone',
+   experimental: {
+      serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs']
+   },
+   // Environment variables for build time
+   env: {
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+      DATABASE_URL: process.env.DATABASE_URL,
+   }
 };
 
 module.exports = nextConfig;

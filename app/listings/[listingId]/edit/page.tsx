@@ -38,18 +38,22 @@ interface VehicleFormData {
 interface PropertyFormData {
   // Location
   location: { district: string; city: string };
+  address: string;
   
   // Property Details
-  propertyType: string;
-  propertySize: string;
-  landSize: string;
   bedrooms: number;
   bathrooms: number;
-  furnished: string;
-  parking: string;
-  security: string;
+  landSize: string;
+  landSizeUnit: string;
+  propertySize: string;
+  propertyType: string;
+  furnishedStatus: string;
+  apartmentComplex: string;
+  landType: string;
+  
+  // Features (for room & annex)
+  privateEntrance: boolean;
   floor: string;
-  address: string;
   
   // Listing Details
   title: string;
@@ -98,7 +102,7 @@ const EditListingPage = () => {
     }
   };
 
-  const handleComplete = async (formData: VehicleFormData) => {
+  const handleVehicleComplete = async (formData: VehicleFormData) => {
     if (!listing) return;
     
     setIsLoading(true);
@@ -151,6 +155,34 @@ const EditListingPage = () => {
     }
   };
 
+  const handlePropertyComplete = async (formData: PropertyFormData) => {
+    if (!listing) return;
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(`/api/listings/${listing.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        router.push('/dashboard');
+      } else {
+        const error = await response.json();
+        alert(error.message || 'Failed to update listing');
+      }
+    } catch (error) {
+      console.error('Error updating listing:', error);
+      alert('Failed to update listing');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleCancel = () => {
     router.push('/dashboard');
   };
@@ -184,15 +216,17 @@ const EditListingPage = () => {
           city: listing.city || ''
         },
         propertyType: listing.propertyAttributes?.propertyType || '',
-        propertySize: listing.propertyAttributes?.propertySize?.toString() || '',
-        landSize: listing.propertyAttributes?.landSize?.toString() || '',
+        propertySize: (listing.propertyAttributes as any)?.propertySize?.toString() || '',
+        landSize: (listing.propertyAttributes as any)?.landSize?.toString() || '',
         bedrooms: listing.propertyAttributes?.bedrooms || 1,
         bathrooms: listing.propertyAttributes?.bathrooms || 1,
-        furnished: listing.propertyAttributes?.furnished || '',
-        parking: listing.propertyAttributes?.parking || '',
-        security: listing.propertyAttributes?.security || '',
-        floor: listing.propertyAttributes?.floor?.toString() || '',
-        address: listing.propertyAttributes?.address || '',
+        furnishedStatus: (listing.propertyAttributes as any)?.furnished || '',
+        apartmentComplex: (listing.propertyAttributes as any)?.apartmentComplex || '',
+        landType: (listing.propertyAttributes as any)?.landType || '',
+        privateEntrance: (listing.propertyAttributes as any)?.privateEntrance || false,
+        floor: (listing.propertyAttributes as any)?.floor?.toString() || '',
+        address: (listing.propertyAttributes as any)?.address || '',
+        landSizeUnit: (listing.propertyAttributes as any)?.landSizeUnit || 'perches',
         title: listing.title || '',
         description: listing.description || '',
         price: listing.price?.toString() || '',
@@ -253,7 +287,8 @@ const EditListingPage = () => {
         
         {listing.mainCategory === 'PROPERTY' ? (
           <SinglePagePropertyForm
-            onComplete={handleComplete}
+            propertyType={listing.propertyAttributes?.propertyType || 'HOUSE'}
+            onComplete={handlePropertyComplete}
             onCancel={handleCancel}
             isLoading={isLoading}
             initialData={getInitialFormData() as PropertyFormData}
@@ -261,7 +296,7 @@ const EditListingPage = () => {
         ) : (
           <SinglePageVehicleForm
             vehicleType={getVehicleType()}
-            onComplete={handleComplete}
+            onComplete={handleVehicleComplete}
             onCancel={handleCancel}
             isLoading={isLoading}
             initialData={getInitialFormData() as VehicleFormData}

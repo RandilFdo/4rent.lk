@@ -14,7 +14,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const query = searchParams.get("search");
+    const query = searchParams?.get("search");
     if (query) {
       setSearchQuery(query);
     }

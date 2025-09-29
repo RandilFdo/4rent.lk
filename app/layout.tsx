@@ -12,6 +12,7 @@ import getCurrentUser from "./actions/getCurrentUser";
 import RentModal from "./components/modals/RentModal";
 import SearchModal from "./components/modals/SearchModal";
 import ConditionalLayout from "./components/ConditionalLayout";
+import Footer from "./components/Footer";
 
 // const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({
@@ -37,7 +38,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   <RegisterModal />
                    <Navbar currentUser={currentUser as any} />
                </ClientOnly>
-               <ConditionalLayout>{children}</ConditionalLayout>
+               <div className="min-h-screen flex flex-col">
+                  <ConditionalLayout>{children}</ConditionalLayout>
+                  <div className="mt-auto">
+                     <Footer />
+                  </div>
+               </div>
             </SessionProvider>
          </body>
       </html>

@@ -42,6 +42,10 @@ export default async function getCurrentUser() {
             updatedAt: new Date().toISOString(),
             emailVerified: null,
             hashedPassword: null,
+            phoneNumber: null,
+            whatsappNumber: null,
+            isAdmin: false,
+            favoriteIds: [],
          };
       }
    } catch (error: any) {
