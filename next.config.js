@@ -19,7 +19,6 @@ const nextConfig = {
             tls: false,
          };
       }
-
       return config;
    },
    // Production optimizations
