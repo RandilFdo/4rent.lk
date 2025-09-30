@@ -13,6 +13,7 @@ import RentModal from "./components/modals/RentModal";
 import SearchModal from "./components/modals/SearchModal";
 import ConditionalLayout from "./components/ConditionalLayout";
 import Footer from "./components/Footer";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                      <Footer />
                   </div>
                </div>
+               <SpeedInsights />
             </SessionProvider>
          </body>
       </html>

@@ -157,7 +157,12 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    return NextResponse.json(listings);
+    const response = NextResponse.json(listings);
+    
+    // Add caching headers for better performance
+    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    
+    return response;
   } catch (error) {
     console.error('Error fetching listings:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

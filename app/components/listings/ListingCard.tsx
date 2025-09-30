@@ -113,6 +113,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
                   src={data.images[0] || '/images/placeholder.jpg'}
                   className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-200"
                   fill
+                  priority={false}
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                />
                <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
                   <HeartButton listingId={data.id} currentUser={currentUser} />

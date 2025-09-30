@@ -1,4 +1,5 @@
 ﻿export const dynamic = "force-dynamic";
+import { Metadata } from "next";
 import getCurrentUser from "./actions/getCurrentUser";
 import getListings, { IListingParams } from "./actions/getListings";
 import ClientOnly from "./components/ClientOnly";
@@ -7,6 +8,17 @@ import EmptyState from "./components/EmptyState";
 import ListingCard from "./components/listings/ListingCard";
 import SearchBar from "./components/SearchBar";
 import { MainCategory } from "./types";
+
+export const metadata: Metadata = {
+  title: "4Rent - Sri Lanka's Premier Rental Marketplace",
+  description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
+  keywords: ["rent", "sri lanka", "vehicles", "properties", "cars", "bikes", "apartments"],
+  openGraph: {
+    title: "4Rent - Sri Lanka's Premier Rental Marketplace",
+    description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
+    type: "website",
+  },
+};
 
 interface HomeProps {
    searchParams: IListingParams;
