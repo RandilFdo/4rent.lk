@@ -1,7 +1,7 @@
 "use client";
 import { SafeListing, SafeReservation, SafeUser, VehicleAttributes, PropertyAttributes, ExperienceAttributes } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, memo } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
@@ -17,7 +17,7 @@ interface ListingCardProps {
    currentUser?: SafeUser | null;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({
+const ListingCard: React.FC<ListingCardProps> = memo(({
    data,
    reservation,
    onAction,
@@ -164,6 +164,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
          </div>
       </div>
    );
-};
+});
+
+ListingCard.displayName = 'ListingCard';
 
 export default ListingCard;

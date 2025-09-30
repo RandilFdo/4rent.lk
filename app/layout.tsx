@@ -18,9 +18,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 // const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({
    subsets: ["latin"],
+   display: 'swap',
+   preload: true,
 });
 
 export const metadata: Metadata = {
+   metadataBase: new URL('https://4rent.lk'),
    title: "4Rent - Sri Lanka's Premier Rental Marketplace",
    description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
    icons: {
@@ -28,12 +31,25 @@ export const metadata: Metadata = {
      shortcut: '/images/tablogo.png',
      apple: '/images/tablogo.png',
    },
+   viewport: 'width=device-width, initial-scale=1',
+   robots: 'index, follow',
+   openGraph: {
+     title: "4Rent - Sri Lanka's Premier Rental Marketplace",
+     description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
+     type: 'website',
+     locale: 'en_US',
+   },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
    const currentUser = await getCurrentUser();
    return (
       <html lang="en">
+         <head>
+            <link rel="preload" href="/images/black logo.png" as="image" type="image/png" />
+            <link rel="preload" href="/images/white logo.png" as="image" type="image/png" />
+            <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+         </head>
          <body className={nunito.className}>
             <SessionProvider>
                <ClientOnly>

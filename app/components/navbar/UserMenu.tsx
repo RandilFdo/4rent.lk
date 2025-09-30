@@ -60,13 +60,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
          <div className="flex flex-row items-center gap-2 sm:gap-3">
                         <div
                            onClick={onRent}
-                           className="hidden md:block landscape:hidden text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
+                           className="hidden lg:block text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
                         >
                            Offer Something 4Rent
                         </div>
             <div
                onClick={toogleOpen}
-               className="p-2 sm:p-3 md:py-1 md:px-2 border-[1px] border-neutral-200 dark:border-gray-600 flex flex-row items-center gap-2 sm:gap-3 rounded-full cursor-pointer hover:shadow-md transition"
+               className="p-2 sm:p-3 md:py-2 md:px-3 border-[1px] border-neutral-200 dark:border-gray-600 flex flex-row items-center gap-2 sm:gap-3 rounded-full cursor-pointer hover:shadow-md transition"
             >
                <AiOutlineMenu className="text-sm sm:text-base text-gray-700 dark:text-white" />
                <div className="hidden md:block">
@@ -75,7 +75,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
             </div>
          </div>
          {isOpen && (
-            <div className="absolute rounded-xl shadow-md w-[50vw] sm:w-[40vw] md:w-full bg-white dark:bg-gray-800 overflow-hidden right-0 top-12 sm:top-14 text-sm">
+            <div className="absolute rounded-xl shadow-md w-[50vw] sm:w-[40vw] md:w-64 bg-white dark:bg-gray-800 overflow-hidden right-0 top-12 sm:top-14 text-sm">
                <div className="flex flex-col cursor-pointer">
                   {/* Mobile Navigation Items */}
                   {navItems.length > 0 && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
 
@@ -8,7 +8,7 @@ interface SearchBarProps {
   onSearch?: (query: string) => void;
 }
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
+const SearchBar = memo(({ onSearch }: SearchBarProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,7 +20,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     }
   }, [searchParams]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (onSearch) {
       onSearch(searchQuery.trim());
@@ -31,7 +31,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         router.push("/");
       }
     }
-  };
+  }, [searchQuery, onSearch, router]);
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -55,6 +55,8 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
       </form>
     </div>
   );
-};
+});
+
+SearchBar.displayName = 'SearchBar';
 
 export default SearchBar;

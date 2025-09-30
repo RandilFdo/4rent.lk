@@ -35,7 +35,6 @@ const nextConfig = {
    swcMinify: true,
    experimental: {
       serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
-      optimizeCss: true,
    },
    // Environment variables for build time
    env: {
