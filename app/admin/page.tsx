@@ -255,8 +255,8 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Container>
-        <div className="py-8">
-          <div className="flex justify-between items-center mb-6">
+        <div className="py-4 sm:py-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-4">
             <div>
               <Heading
                 title="Admin Dashboard"
@@ -265,7 +265,7 @@ const AdminDashboard = () => {
             </div>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+              className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -275,73 +275,73 @@ const AdminDashboard = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-1.5 sm:p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                   </svg>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Total Listings</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.totalListings}</p>
+                <div className="ml-2 sm:ml-4">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Total</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white">{stats.totalListings}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-                  <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-1.5 sm:p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Pending</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.pendingListings}</p>
+                <div className="ml-2 sm:ml-4">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Pending</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white">{stats.pendingListings}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-1.5 sm:p-2 bg-green-100 dark:bg-green-900 rounded-lg">
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Approved</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.approvedListings}</p>
+                <div className="ml-2 sm:ml-4">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Approved</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white">{stats.approvedListings}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-red-100 dark:bg-red-900 rounded-lg">
-                  <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-1.5 sm:p-2 bg-red-100 dark:bg-red-900 rounded-lg">
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Rejected</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.rejectedListings}</p>
+                <div className="ml-2 sm:ml-4">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Rejected</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white">{stats.rejectedListings}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                  <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="p-1.5 sm:p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Total Inquiries</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{inquiries.length}</p>
+                <div className="ml-2 sm:ml-4">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">Inquiries</p>
+                  <p className="text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white">{inquiries.length}</p>
                 </div>
               </div>
             </div>
@@ -351,16 +351,16 @@ const AdminDashboard = () => {
           {/* Tabs */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
             <div className="border-b border-gray-200 dark:border-gray-700">
-              <nav className="-mb-px flex space-x-8 px-6">
+              <nav className="-mb-px flex space-x-2 sm:space-x-8 px-3 sm:px-6 overflow-x-auto">
                 {[
-                  { id: 'pending', name: 'Pending Listings', count: pendingListings.length },
+                  { id: 'pending', name: 'Pending', count: pendingListings.length },
                   { id: 'history', name: 'All Listings', count: allListings.length },
                   { id: 'inquiries', name: 'Inquiries', count: inquiries.length },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    className={`py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-medium text-xs sm:text-sm whitespace-nowrap ${
                       activeTab === tab.id
                         ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
@@ -372,7 +372,7 @@ const AdminDashboard = () => {
               </nav>
             </div>
 
-            <div className="p-6">
+            <div className="p-3 sm:p-6">
               {/* Pending Listings Tab */}
               {activeTab === 'pending' && (
                 <div>
