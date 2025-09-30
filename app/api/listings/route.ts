@@ -145,7 +145,6 @@ export async function GET(request: NextRequest) {
     const listings = await prisma.listing.findMany({
       where: query,
       orderBy: [
-        { isFeatured: 'desc' },
         { createdAt: 'desc' }
       ],
       include: {

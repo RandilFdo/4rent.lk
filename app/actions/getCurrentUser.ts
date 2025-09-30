@@ -29,7 +29,6 @@ export default async function getCurrentUser() {
             createdAt: currentUser.createdAt.toISOString(),
             updatedAt: currentUser.updatedAt.toISOString(),
             emailVerified: currentUser.emailVerified?.toISOString() || null,
-            role: currentUser.role || 'user',
          };
       } catch (dbError) {
          // If database is down, return demo user data
@@ -46,7 +45,6 @@ export default async function getCurrentUser() {
             phoneNumber: null,
             whatsappNumber: null,
             isAdmin: false,
-            role: 'user',
             favoriteIds: [],
          };
       }

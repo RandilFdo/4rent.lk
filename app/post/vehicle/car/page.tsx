@@ -24,7 +24,6 @@ interface VehicleFormData {
   images: string[];
   contactPhone: string;
   contactName: string;
-  isFeatured: boolean;
 }
 
 const CarPostPage = () => {
@@ -82,46 +81,9 @@ const CarPostPage = () => {
       if (response.ok) {
         const listingData = await response.json();
         
-        if (formData.isFeatured) {
-          // If featured is selected, redirect to payment
-          const paymentResponse = await fetch('/api/featured/payment', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ listingId: listingData.id }),
-          });
-
-          if (paymentResponse.ok) {
-            const paymentData = await paymentResponse.json();
-            
-            // Create a form and submit to PayHere
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = paymentData.payHereUrl;
-            form.target = '_blank';
-
-            Object.keys(paymentData.payHereData).forEach(key => {
-              const input = document.createElement('input');
-              input.type = 'hidden';
-              input.name = key;
-              input.value = paymentData.payHereData[key];
-              form.appendChild(input);
-            });
-
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-          } else {
-            const error = await paymentResponse.json();
-            alert(`Payment initiation failed: ${error.error}`);
-            router.push('/dashboard');
-          }
-        } else {
-          // Regular listing submission
-          alert('Your listing has been submitted for review! It will be published once approved by our admin team. You can check the status in your dashboard.');
-          router.push('/dashboard');
-        }
+        // Regular listing submission
+        alert('Your listing has been submitted for review! It will be published once approved by our admin team. You can check the status in your dashboard.');
+        router.push('/dashboard');
       } else {
         const error = await response.json();
         alert(`Error: ${error.error}`);

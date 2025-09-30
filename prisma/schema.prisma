@@ -20,7 +20,6 @@ model User {
   phoneNumber     String?
   whatsappNumber  String?
   isAdmin         Boolean  @default(false)
-  role            String   @default("user") // user, admin
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   favoriteIds     String[] @db.ObjectId
@@ -28,8 +27,6 @@ model User {
   accounts Account[]
   listings Listing[]
   reservations Reservation[]
-  businesses Business[]
-  refundRequests RefundRequest[]
 }
 
 model Account {
@@ -81,16 +78,10 @@ model Listing {
   
   // Status and admin controls
   status         String @default("PENDING") // PENDING, APPROVED, REJECTED, EXPIRED
-  isFeatured     Boolean @default(false)
-  featuredUntil  DateTime? // When featured status expires
   adminNotes     String?
   viewCount      Int @default(0)
   expiresAt      DateTime? // Freshness expiry (30 days from approval)
   lastRenewedAt  DateTime?
-  
-  // Business relation (nullable for individual users)
-  businessId     String? @db.ObjectId
-  businessVerified Boolean @default(false) // True if posted by verified business
   
   // User relation
   userId         String @db.ObjectId
@@ -105,7 +96,6 @@ model Listing {
   experienceAttributes Json?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  business Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
   reservations Reservation[]
 }
 
@@ -120,68 +110,4 @@ model Reservation {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-}
-
-model Business {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  businessName String
-  logoUrl String? // Business logo URL
-  contactPerson String // Contact person name
-  contactNumber String // Contact phone
-  contactEmail String // Contact email
-  category String? // Business category (optional)
-  description String? // Short business description
-  address String? // Business address (optional)
-  status String @default("trial") // trial, active, expired, suspended
-  trialEndDate DateTime
-  nextPaymentDue DateTime
-  autoRenew Boolean @default(false) // Auto-renewal setting
-  verified Boolean @default(false) // Verified business badge
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listings Listing[]
-  refundRequests RefundRequest[]
-}
-
-model RefundRequest {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  businessId String? @db.ObjectId // Nullable for individual user refunds
-  userId String @db.ObjectId
-  amount Int
-  reason String
-  transactionId String? // PayHere transaction ID
-  supportingEvidence String? // Additional evidence/notes
-  status String @default("pending") // pending, approved, rejected
-  processedBy String? // Admin who processed the refund
-  processedAt DateTime? // When refund was processed
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// Banner Ads model for admin management
-model BannerAd {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  imageUrl String
-  altText String
-  landingUrl String
-  advertiserName String
-  contactPerson String
-  contactPhone String
-  contactEmail String
-  duration String // 1 week, 2 weeks, 1 month, custom
-  targetPlacement String // Homepage feed row, Category page, Specific region
-  startDate DateTime
-  endDate DateTime
-  isActive Boolean @default(true)
-  paymentStatus String @default("pending") // pending, paid, expired
-  adminNotes String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

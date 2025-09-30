@@ -24,23 +24,15 @@ export async function GET() {
       pendingListings,
       approvedListings,
       rejectedListings,
-      featuredListings,
-      totalViews,
-      totalBusinesses,
-      activeBusinesses,
-      expiredBusinesses
+      totalViews
     ] = await Promise.all([
       prisma.listing.count(),
       prisma.listing.count({ where: { status: "PENDING" } }),
       prisma.listing.count({ where: { status: "APPROVED" } }),
       prisma.listing.count({ where: { status: "REJECTED" } }),
-      prisma.listing.count({ where: { isFeatured: true } }),
       prisma.listing.aggregate({
         _sum: { viewCount: true }
-      }),
-      prisma.business.count(),
-      prisma.business.count({ where: { status: "active" } }),
-      prisma.business.count({ where: { status: "expired" } })
+      })
     ]);
 
     return NextResponse.json({
@@ -48,11 +40,7 @@ export async function GET() {
       pendingListings,
       approvedListings,
       rejectedListings,
-      featuredListings,
-      totalViews: totalViews._sum.viewCount || 0,
-      totalBusinesses,
-      activeBusinesses,
-      expiredBusinesses
+      totalViews: totalViews._sum.viewCount || 0
     });
   } catch (error) {
     console.error('Error fetching admin stats:', error);

@@ -139,15 +139,7 @@ export default async function getListings(params: IListingParams) {
       console.log('Database query:', JSON.stringify(query, null, 2));
       
       const listings = await prisma.listing.findMany({
-         where: query,
-         include: {
-            business: {
-               select: {
-                  verified: true,
-                  status: true
-               }
-            }
-         }
+         where: query
       });
       
       console.log('Found listings:', listings.length);
@@ -276,38 +268,10 @@ export default async function getListings(params: IListingParams) {
          });
       }
 
-      // Apply ranking algorithm
-      const rankedListings = filteredListings.map((listing) => {
-         // Calculate ranking score
-         let score = 0;
-         
-         // Featured ads get 1000 points
-         if (listing.isFeatured) {
-            score += 1000;
-         }
-         
-         // Verified business ads get 500 points
-         if (listing.business?.verified && (listing.business.status === 'trial' || listing.business.status === 'active')) {
-            score += 500;
-         }
-         
-         // Freshness factor: (1 / (daysSincePosted + 1)) * 100
-         const now = new Date();
-         const createdAt = new Date(listing.createdAt);
-         const daysSincePosted = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
-         const freshnessScore = (1 / (daysSincePosted + 1)) * 100;
-         score += freshnessScore;
-         
-         return {
-            ...listing,
-            rankingScore: score
-         };
-      });
+      // Sort by creation date (newest first)
+      filteredListings.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-      // Sort by ranking score (descending)
-      rankedListings.sort((a: any, b: any) => b.rankingScore - a.rankingScore);
-
-      const safeListings = rankedListings.map((listing: any) => ({
+      const safeListings = filteredListings.map((listing: any) => ({
          ...listing,
          createdAt: listing.createdAt.toISOString(),
          updatedAt: listing.updatedAt.toISOString(),
@@ -315,9 +279,7 @@ export default async function getListings(params: IListingParams) {
          lastRenewedAt: listing.lastRenewedAt ? listing.lastRenewedAt.toISOString() : undefined,
          vehicleAttributes: listing.vehicleAttributes as any,
          propertyAttributes: listing.propertyAttributes as any,
-         experienceAttributes: listing.experienceAttributes as any,
-         businessVerified: listing.business?.verified || false,
-         rankingScore: listing.rankingScore
+         experienceAttributes: listing.experienceAttributes as any
       }));
 
       return safeListings;

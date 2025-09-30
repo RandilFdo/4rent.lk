@@ -11,11 +11,7 @@ interface AdminStats {
   pendingListings: number;
   approvedListings: number;
   rejectedListings: number;
-  featuredListings: number;
   totalViews: number;
-  totalBusinesses: number;
-  activeBusinesses: number;
-  expiredBusinesses: number;
 }
 
 interface Listing {
@@ -30,17 +26,9 @@ interface Listing {
   createdAt: string;
   updatedAt: string;
   status: string;
-  isFeatured: boolean;
-  featuredUntil?: string;
-  businessVerified: boolean;
   user: {
     name: string;
     email: string;
-  };
-  business?: {
-    businessName: string;
-    logoUrl?: string;
-    verified: boolean;
   };
   images: string[];
   description: string;
@@ -49,24 +37,6 @@ interface Listing {
   experienceAttributes?: any;
 }
 
-interface Business {
-  id: string;
-  businessName: string;
-  logoUrl?: string;
-  contactPerson: string;
-  contactNumber: string;
-  contactEmail: string;
-  category?: string;
-  status: string;
-  trialEndDate: string;
-  nextPaymentDue: string;
-  verified: boolean;
-  createdAt: string;
-  user: {
-    name: string;
-    email: string;
-  };
-}
 
 const AdminDashboard = () => {
   const router = useRouter();
@@ -75,15 +45,10 @@ const AdminDashboard = () => {
     pendingListings: 0,
     approvedListings: 0,
     rejectedListings: 0,
-    featuredListings: 0,
-    totalViews: 0,
-    totalBusinesses: 0,
-    activeBusinesses: 0,
-    expiredBusinesses: 0
+    totalViews: 0
   });
   const [pendingListings, setPendingListings] = useState<Listing[]>([]);
   const [allListings, setAllListings] = useState<Listing[]>([]);
-  const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeTab, setActiveTab] = useState('pending');
@@ -95,7 +60,6 @@ const AdminDashboard = () => {
     fetchStats();
     fetchPendingListings();
     fetchAllListings();
-    fetchBusinesses();
   }, []);
 
   const checkAdminStatus = async () => {
@@ -164,19 +128,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchBusinesses = async () => {
-    try {
-      const response = await fetch('/api/admin/businesses');
-      if (response.ok) {
-        const data = await response.json();
-        setBusinesses(data);
-      }
-    } catch (error) {
-      console.error('Error fetching businesses:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleApprove = async (listingId: string) => {
     try {
@@ -251,20 +202,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const getBusinessStatusBadge = (status: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'trial':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'expired':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'suspended':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-    }
-  };
 
   if (!isAdmin) {
     return (
@@ -365,25 +302,10 @@ const AdminDashboard = () => {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Featured</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.featuredListings}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg">
-                  <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Businesses</p>
-                  <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stats.totalBusinesses}</p>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Tabs */}
@@ -393,7 +315,6 @@ const AdminDashboard = () => {
                 {[
                   { id: 'pending', name: 'Pending Listings', count: pendingListings.length },
                   { id: 'history', name: 'All Listings', count: allListings.length },
-                  { id: 'businesses', name: 'Businesses', count: businesses.length }
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -537,16 +458,6 @@ const AdminDashboard = () => {
                                   <h4 className="text-lg font-medium text-gray-900 dark:text-white truncate">
                                     {listing.title}
                                   </h4>
-                                  {listing.isFeatured && (
-                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                                      ⭐ Featured
-                                    </span>
-                                  )}
-                                  {listing.businessVerified && (
-                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                      ✓ Verified Business
-                                    </span>
-                                  )}
                                 </div>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
                                   {listing.mainCategory} - {listing.subCategory}
@@ -579,76 +490,6 @@ const AdminDashboard = () => {
                 </div>
               )}
 
-              {/* Businesses Tab */}
-              {activeTab === 'businesses' && (
-                <div>
-                  <div className="mb-4">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Business Management</h3>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    {businesses.map((business) => (
-                      <div key={business.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                        <div className="flex items-start space-x-4">
-                          <div className="flex-shrink-0">
-                            {business.logoUrl ? (
-                              <img
-                                className="h-16 w-16 rounded-lg object-cover"
-                                src={business.logoUrl}
-                                alt={business.businessName}
-                              />
-                            ) : (
-                              <div className="h-16 w-16 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                                <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                </svg>
-                              </div>
-                            )}
-                          </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h4 className="text-lg font-medium text-gray-900 dark:text-white">
-                                  {business.businessName}
-                                </h4>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Contact: {business.contactPerson} ({business.contactEmail})
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Phone: {business.contactNumber}
-                                </p>
-                                <p className="text-sm text-gray-500 dark:text-gray-500">
-                                  Registered by {business.user.name} on {new Date(business.createdAt).toLocaleDateString()}
-                                </p>
-                                <div className="flex items-center space-x-2 mt-2">
-                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getBusinessStatusBadge(business.status)}`}>
-                                    {business.status.toUpperCase()}
-                                  </span>
-                                  {business.verified && (
-                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                      ✓ Verified
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                              
-                              <div className="text-right">
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Trial ends: {new Date(business.trialEndDate).toLocaleDateString()}
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Next payment: {new Date(business.nextPaymentDue).toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -691,23 +532,7 @@ const AdminDashboard = () => {
                     </div>
                   )}
                   
-                  {/* Featured Badge */}
-                  {selectedListing.isFeatured && (
-                    <div className="absolute top-4 left-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-600 text-white">
-                        ⭐ Featured
-                      </span>
-                    </div>
-                  )}
                   
-                  {/* Business Verified Badge */}
-                  {selectedListing.businessVerified && (
-                    <div className="absolute top-4 right-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-600 text-white">
-                        ✓ Verified Business
-                      </span>
-                    </div>
-                  )}
                 </div>
                 
                 {/* Content */}

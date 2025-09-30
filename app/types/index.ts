@@ -71,17 +71,14 @@ export type SriLankanDistrict =
   | "KURUNEGALA" | "PUTTALAM" | "ANURADHAPURA" | "POLONNARUWA"
   | "BADULLA" | "MONARAGALA" | "RATNAPURA" | "KEGALLE";
 
-export type SafeListing = Omit<Listing, "createdAt" | "updatedAt" | "expiresAt" | "lastRenewedAt" | "featuredUntil"> & {
+export type SafeListing = Omit<Listing, "createdAt" | "updatedAt" | "expiresAt" | "lastRenewedAt"> & {
    createdAt: string;
    updatedAt: string;
    expiresAt?: string;
    lastRenewedAt?: string;
-   featuredUntil?: string;
    vehicleAttributes?: VehicleAttributes;
    propertyAttributes?: PropertyAttributes;
    experienceAttributes?: ExperienceAttributes;
-   businessVerified?: boolean;
-   rankingScore?: number;
 };
 
 export type SafeReservation = Omit<
@@ -97,5 +94,4 @@ export type SafeReservation = Omit<
 export type SafeUser = Omit<User, "createdAt" | "updatedAt" | "emailVerified"> & {
    createdAt: string;
    updatedAt: string;
-   role: string;
 };

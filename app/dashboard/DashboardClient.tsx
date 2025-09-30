@@ -10,17 +10,9 @@ import { useRouter } from "next/navigation";
 
 interface DashboardClientProps {
   currentUser: SafeUser;
-  userBusiness?: {
-    id: string;
-    businessName: string;
-    status: string;
-    verified: boolean;
-    trialEndDate: string;
-    nextPaymentDue: string;
-  } | null;
 }
 
-const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusiness }) => {
+const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
   const [listings, setListings] = useState<SafeListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -117,49 +109,6 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusi
     }
   };
 
-  const handleUpgradeToFeatured = async (listingId: string) => {
-    if (!confirm('Upgrade this ad to Featured for 300 LKR? Featured ads appear at the top of search results for 7 days.')) {
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/featured/payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ listingId }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Create a form and submit to PayHere
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = data.payHereUrl;
-        form.target = '_blank';
-
-        Object.keys(data.payHereData).forEach(key => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = data.payHereData[key];
-          form.appendChild(input);
-        });
-
-        document.body.appendChild(form);
-        form.submit();
-        document.body.removeChild(form);
-      } else {
-        const error = await response.json();
-        alert(error.error || 'Failed to initiate featured payment');
-      }
-    } catch (error) {
-      console.error('Error upgrading to featured:', error);
-      alert('Failed to upgrade to featured');
-    }
-  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-LK', {
@@ -218,34 +167,10 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusi
         <div className="max-w-7xl mx-auto">
                       {/* Header */}
                       <div className="mb-6 sm:mb-8">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                          <div>
-                            <Heading
-                              title="Your Dashboard"
-                              subtitle={`Welcome back, ${currentUser.name}! Manage your listings here.`}
-                            />
-                          </div>
-                          <div className="flex items-center gap-3">
-                            {/* User Status Badge */}
-                            <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-300 ${
-                              userBusiness 
-                                ? 'border-green-400 text-green-600 dark:text-green-400 bg-transparent hover:bg-green-50 dark:hover:bg-green-900/20' 
-                                : 'border-gray-400 text-gray-600 dark:text-gray-400 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800'
-                            }`}>
-                              <div className={`w-2 h-2 rounded-full mr-2 ${
-                                userBusiness ? 'bg-green-500' : 'bg-gray-500'
-                              }`}></div>
-                              {userBusiness ? (
-                                <span className="flex items-center gap-1">
-                                  <span>Business</span>
-                                  {userBusiness.verified && <span className="text-green-500">✓</span>}
-                                </span>
-                              ) : (
-                                <span>Free</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+                        <Heading
+                          title="Your Dashboard"
+                          subtitle={`Welcome back, ${currentUser.name}! Manage your listings here.`}
+                        />
                       </div>
 
           {/* Stats Cards */}
@@ -298,12 +223,6 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusi
               className="w-full sm:w-auto bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm sm:text-base"
             >
               + Post New Listing
-            </button>
-            <button
-              onClick={() => router.push('/business/register')}
-              className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors font-medium text-sm sm:text-base"
-            >
-              Register as a Business
             </button>
           </div>
 
@@ -398,11 +317,6 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusi
                                     return listing.status;
                                   })()}
                                 </span>
-                                {listing.isFeatured && (
-                                  <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
-                                    ⭐ Featured
-                                  </span>
-                                )}
                               </div>
                             </div>
 
@@ -490,15 +404,6 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusi
                               >
                                 Edit
                               </button>
-                              {/* Upgrade to Featured button - only for approved listings */}
-                              {listing.status === 'APPROVED' && !listing.isFeatured && (
-                                <button
-                                  onClick={() => handleUpgradeToFeatured(listing.id)}
-                                  className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-colors text-xs"
-                                >
-                                  ⭐ Feature
-                                </button>
-                              )}
                               {(() => {
                                 if (!listing.expiresAt) return null;
                                 const now = new Date();

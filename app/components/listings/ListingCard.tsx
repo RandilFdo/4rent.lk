@@ -117,11 +117,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
                <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
                   <HeartButton listingId={data.id} currentUser={currentUser} />
                </div>
-               {data.isFeatured && (
-                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 sm:px-3 rounded-full text-xs font-bold shadow-lg">
-                     ⭐ Featured
-                  </div>
-               )}
             </div>
             
             <div className="flex flex-col flex-grow p-3 sm:p-4 space-y-2 sm:space-y-3 min-h-[100px] sm:min-h-[120px]">

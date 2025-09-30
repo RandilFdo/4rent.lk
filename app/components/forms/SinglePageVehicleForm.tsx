@@ -34,7 +34,6 @@ interface VehicleFormData {
   contactName: string;
   
   // Featured Option
-  isFeatured: boolean;
 }
 
 interface SinglePageVehicleFormProps {
@@ -70,7 +69,6 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
     images: initialData?.images || [],
     contactPhone: initialData?.contactPhone || "",
     contactName: initialData?.contactName || "",
-    isFeatured: initialData?.isFeatured || false
   });
 
   // Note: Autofill removed - no profile system implemented yet
@@ -455,45 +453,6 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
               </div>
             )}
 
-            {/* Featured Option */}
-            {activeTab === "contact" && (
-              <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-700">
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
-                  <span>⭐</span> Make Your Ad Featured
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="isFeatured"
-                      checked={formData.isFeatured}
-                      onChange={(e) => updateFormData("isFeatured", e.target.checked)}
-                      className="mt-1 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
-                    />
-                    <div className="flex-1">
-                      <label htmlFor="isFeatured" className="text-sm font-medium text-gray-800 dark:text-white cursor-pointer">
-                        Feature this ad for 7 days (300 LKR)
-                      </label>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                        Featured ads appear at the top of search results and get 1000+ ranking points for maximum visibility.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {formData.isFeatured && (
-                    <div className="bg-purple-100 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 rounded-lg p-4">
-                      <div className="flex items-center gap-2 text-purple-800 dark:text-purple-200">
-                        <span className="text-lg">💳</span>
-                        <span className="font-medium">Payment Required</span>
-                      </div>
-                      <p className="text-sm text-purple-700 dark:text-purple-300 mt-1">
-                        After submitting your listing, you'll be redirected to PayHere to complete the 300 LKR payment for featured status.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Right Column - Summary */}
@@ -559,16 +518,6 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
                   {formData.contactName || "Not specified"}
                 </span>
               </div>
-              <div>
-                <span className="font-medium">Featured:</span>
-                <span className="ml-2">
-                  {formData.isFeatured ? (
-                    <span className="text-purple-600 dark:text-purple-400 font-medium">⭐ Yes (300 LKR)</span>
-                  ) : (
-                    <span className="text-gray-500">No</span>
-                  )}
-                </span>
-              </div>
             </div>
           </div>
         </div>
@@ -609,7 +558,7 @@ const SinglePageVehicleForm: React.FC<SinglePageVehicleFormProps> = ({
             {isLoading 
               ? 'Posting...' 
               : isLastStep 
-                ? (formData.isFeatured ? 'Post & Pay for Featured' : 'Post Listing')
+                ? 'Post Listing'
                 : 'Next Step'
             }
           </button>

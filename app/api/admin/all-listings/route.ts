@@ -10,13 +10,6 @@ export async function GET(request: NextRequest) {
             name: true,
             email: true
           }
-        },
-        business: {
-          select: {
-            businessName: true,
-            logoUrl: true,
-            verified: true
-          }
         }
       },
       orderBy: {

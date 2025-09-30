@@ -23,21 +23,6 @@ const Footer = () => {
                   List Property
                 </Link>
               </li>
-              <li>
-                <Link href="/business-registration" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  Business Registration
-                </Link>
-              </li>
-              <li>
-                <Link href="/banner-ads" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  Banner Ads
-                </Link>
-              </li>
-              <li>
-                <Link href="/boost" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  Boost Ad
-                </Link>
-              </li>
             </ul>
           </div>
 
