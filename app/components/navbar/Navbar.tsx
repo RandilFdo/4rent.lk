@@ -60,25 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
                      ))}
                   </div>
 
-                  {/* Mobile Navigation Tabs - Horizontal scroll */}
-                  <div className="flex md:hidden items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-full p-0.5 overflow-x-auto">
-                     {navItems.map((item) => (
-                        <button
-                           key={item.label}
-                           onClick={() => router.push(item.href)}
-                           className={`flex items-center space-x-1 px-2 py-1.5 rounded-full transition-all duration-300 whitespace-nowrap ${
-                              isActive(item.href)
-                                 ? "bg-white dark:bg-gray-700 shadow-sm text-blue-600 dark:text-blue-400 font-medium"
-                                 : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
-                           }`}
-                        >
-                           <span className="text-sm">{item.icon}</span>
-                           <span className="text-xs">{item.label}</span>
-                        </button>
-                     ))}
-                  </div>
-
-                  <UserMenu currentUser={currentUser} />
+                  <UserMenu currentUser={currentUser} navItems={navItems} />
                </div>
             </Container>
          </div>

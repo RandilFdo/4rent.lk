@@ -13,9 +13,10 @@ import useDarkMode from "@/app/hooks/useDarkMode";
 
 interface UserMenuProps {
    currentUser?: SafeUser | null;
+   navItems?: Array<{ label: string; href: string; icon: string }>;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
    const [isOpen, setIsOpen] = useState(false);
    const menuRef = useRef<HTMLDivElement>(null);
 
@@ -76,6 +77,24 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
          {isOpen && (
             <div className="absolute rounded-xl shadow-md w-[50vw] sm:w-[40vw] md:w-full bg-white dark:bg-gray-800 overflow-hidden right-0 top-12 sm:top-14 text-sm">
                <div className="flex flex-col cursor-pointer">
+                  {/* Mobile Navigation Items */}
+                  {navItems.length > 0 && (
+                     <>
+                        <div className="md:hidden border-b border-gray-200 dark:border-gray-700">
+                           {navItems.map((item) => (
+                              <MenuItem
+                                 key={item.label}
+                                 onClick={() => {
+                                    router.push(item.href);
+                                    setIsOpen(false);
+                                 }}
+                                 label={`${item.icon} ${item.label}`}
+                              />
+                           ))}
+                        </div>
+                     </>
+                  )}
+
                   {currentUser ? (
                      <>
                         <MenuItem
