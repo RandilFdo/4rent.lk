@@ -102,7 +102,7 @@ model Listing {
 model Reservation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
-  listingId String @db.ObjectId  
+  listingId String @db.ObjectId
   startDate DateTime
   endDate DateTime
   totalPrice Int
@@ -110,4 +110,16 @@ model Reservation {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Inquiry {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  email String
+  subject String
+  message String
+  category String @default("general")
+  status String @default("new") // new, read, replied, closed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -14,13 +14,23 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="grid grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           
-          {/* More from 4Rent */}
+          {/* Post a 100% free ad on 4Rent */}
           <div className="space-y-2 sm:space-y-4">
-            <h3 className={`font-bold text-xs sm:text-base lg:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>More from 4Rent</h3>
+            <h3 className={`font-bold text-xs sm:text-base lg:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>Post a 100% free ad on 4Rent</h3>
             <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/post" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  List Property
+                <Link href="/post/vehicle" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                  Offer Vehicle4rent
+                </Link>
+              </li>
+              <li>
+                <Link href="/post/building" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                  Offer Property4rent
+                </Link>
+              </li>
+              <li>
+                <Link href="/post/experience" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                  Offer an Experience
                 </Link>
               </li>
             </ul>
@@ -36,8 +46,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/safety" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  Stay Safe
+                <Link href="/stay-safe-online" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                  Stay Safe Online
                 </Link>
               </li>
               <li>
@@ -53,28 +63,18 @@ const Footer = () => {
             <h3 className={`font-bold text-xs sm:text-base lg:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>About 4Rent</h3>
             <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/about" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/about-us" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/terms-and-conditions" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Terms and Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/privacy-policy" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/sitemap" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
-                  Sitemap
                 </Link>
               </li>
             </ul>

@@ -22,6 +22,11 @@ const nunito = Nunito({
 export const metadata: Metadata = {
    title: "4Rent - Sri Lanka's Premier Rental Marketplace",
    description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
+   icons: {
+     icon: '/images/tablogo.png',
+     shortcut: '/images/tablogo.png',
+     apple: '/images/tablogo.png',
+   },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
