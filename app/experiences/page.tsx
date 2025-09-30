@@ -114,15 +114,15 @@ const ExperiencesPage = () => {
   }
 
   return (
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 via-pink-400/20 to-indigo-400/20"></div>
         <div className="relative">
           <Container>
-            <div className="pt-40 pb-20 text-center">
-              <div className="max-w-4xl mx-auto">
-                <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight dark:text-white">
+            <div className="pt-32 sm:pt-40 pb-12 sm:pb-20 text-center">
+              <div className="max-w-4xl mx-auto px-4">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 leading-tight dark:text-white">
                   Discover Fun Activities You Can Do in{" "}
                   <span className="inline-block">
                     <span className="text-red-500">S</span>
@@ -135,25 +135,25 @@ const ExperiencesPage = () => {
                     <span className="text-orange-500">a</span>
                   </span>
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">
                   From thrilling adventures to cultural experiences, discover the best activities 
                   that make Sri Lanka truly special. Book your next unforgettable experience today!
                 </p>
                 
                 {/* Search Bar */}
-                <div className="max-w-2xl mx-auto mb-16">
+                <div className="max-w-2xl mx-auto mb-8 sm:mb-16">
                   <SearchBar onSearch={handleSearch} />
                 </div>
 
                 {/* Experience Categories */}
-                <div className="grid grid-cols-5 md:grid-cols-5 gap-2 sm:gap-3 max-w-4xl mx-auto mb-24">
+                <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-5 gap-2 sm:gap-3 max-w-4xl mx-auto mb-16 sm:mb-24">
                   {experienceCategories.map((category, index) => (
                     <div
                       key={category.type}
-                      className="bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2 sm:p-3 hover:bg-white hover:shadow-lg transition-all duration-300 cursor-pointer group"
+                      className="bg-white/80 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 hover:bg-white hover:shadow-lg transition-all duration-300 cursor-pointer group"
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
-                      <div className="text-xl sm:text-2xl md:text-3xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">
+                      <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">
                         {category.icon}
                       </div>
                       <p className="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-purple-600 text-center leading-tight">
@@ -179,22 +179,22 @@ const ExperiencesPage = () => {
             />
           ) : (
             <>
-              <div className="mt-16"></div>
-              <div className="flex justify-between items-center mb-8">
+              <div className="mt-8 sm:mt-16"></div>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
                 <div>
-                  <h2 className="text-3xl font-bold gradient-text">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold gradient-text">
                     {searchQuery ? `Search Results for "${searchQuery}"` : "Available Experiences"}
                   </h2>
-                  <p className="text-gray-600 mt-2 text-lg">
+                  <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 mt-1 sm:mt-2">
                     Discover amazing activities and experiences across Sri Lanka
                   </p>
                 </div>
-                <div className="text-sm text-gray-500 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full font-medium">
+                <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-3 py-2 sm:px-4 rounded-full font-medium self-start sm:self-auto">
                   {listings.length} {listings.length === 1 ? "experience" : "experiences"} found
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 items-stretch">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 items-stretch">
                 {listings.map((listing: SafeListing) => (
                   <ListingCard key={listing.id} data={listing} currentUser={currentUser} />
                 ))}
@@ -205,7 +205,7 @@ const ExperiencesPage = () => {
       </Container>
       
       {/* Bottom Spacing */}
-      <div className="pb-20"></div>
+      <div className="pb-16 sm:pb-20"></div>
     </div>
   );
 };

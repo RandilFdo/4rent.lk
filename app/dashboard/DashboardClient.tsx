@@ -246,13 +246,13 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 lg:gap-6">
                 {listings.map((listing) => (
-                  <div key={listing.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 lg:p-6 hover:shadow-md transition-shadow flex flex-col h-full bg-white dark:bg-gray-800">
+                  <div key={listing.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4 lg:p-6 hover:shadow-md transition-shadow bg-white dark:bg-gray-800">
                     {/* Mobile: Card layout, Desktop: Row layout */}
-                    <div className="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4">
                       {/* Image */}
-                      <div className="w-full lg:w-48 h-32 lg:h-32 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-full lg:w-48 h-24 sm:h-32 lg:h-32 rounded-lg overflow-hidden flex-shrink-0">
                         {listing.images && listing.images.length > 0 ? (
                           <img
                             src={listing.images[0]}
@@ -261,43 +261,40 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                           />
                         ) : (
                           <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                            <span className="text-gray-400 dark:text-gray-500">No Image</span>
+                            <span className="text-gray-400 dark:text-gray-500 text-xs">No Image</span>
                           </div>
                         )}
                       </div>
 
                       {/* Content */}
-                      <div className="flex-1 flex flex-col">
-                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 flex-1">
-                          <div className="flex-1 flex flex-col">
-                            {/* Title - Fixed height */}
-                            <div className="h-12 mb-2 flex items-start">
-                              <h4 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">{listing.title}</h4>
+                      <div className="flex-1 flex flex-col min-h-0">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 sm:gap-4 flex-1">
+                          <div className="flex-1 flex flex-col min-h-0">
+                            {/* Title */}
+                            <div className="mb-2">
+                              <h4 className="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 dark:text-white line-clamp-2 leading-tight">{listing.title}</h4>
                             </div>
                             
-                            {/* Description - Fixed height */}
-                            <div className="h-10 mb-3 flex items-start">
-                              <p className="text-gray-600 dark:text-gray-300 line-clamp-2 text-sm">{listing.description}</p>
+                            {/* Location and Price in one row on mobile */}
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mb-2">
+                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                                <span>📍</span>
+                                <span className="truncate">{listing.city}, {listing.district}</span>
+                              </span>
+                              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                                <span>💰</span>
+                                <span className="font-medium">{formatPrice(listing.price)} {listing.priceUnit}</span>
+                              </span>
                             </div>
                             
-                            {/* Location - Fixed height */}
-                            <div className="h-5 mb-2 flex items-center">
-                              <span className="text-sm text-gray-600 dark:text-gray-300">📍 {listing.city}, {listing.district}</span>
-                            </div>
-                            
-                            {/* Price - Fixed height */}
-                            <div className="h-5 mb-2 flex items-center">
-                              <span className="text-sm text-gray-600 dark:text-gray-300">💰 {formatPrice(listing.price)} {listing.priceUnit}</span>
-                            </div>
-                            
-                            {/* Date - Fixed height */}
-                            <div className="h-5 mb-3 flex items-center">
-                              <span className="text-sm text-gray-600 dark:text-gray-300">📅 {new Date(listing.createdAt).toLocaleDateString()}</span>
+                            {/* Date */}
+                            <div className="mb-2">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">📅 {new Date(listing.createdAt).toLocaleDateString()}</span>
                             </div>
 
-                            {/* Status Badge - Fixed height */}
-                            <div className="h-8 mb-2 flex items-center">
-                              <div className="flex items-center gap-2">
+                            {/* Status Badge */}
+                            <div className="mb-2">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <span className={getStatusBadge(listing.status, listing)}>
                                   {(() => {
                                     const now = new Date();
@@ -307,7 +304,6 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                                       const expiresAt = new Date(listing.expiresAt);
                                       daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                                     } else {
-                                      // Calculate from creation date if no expiry date
                                       const createdAt = new Date(listing.createdAt);
                                       const thirtyDaysFromCreation = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000);
                                       daysUntilExpiry = Math.ceil((thirtyDaysFromCreation.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
@@ -327,11 +323,10 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                               </div>
                             </div>
 
-                            {/* Days Remaining Countdown - Fixed height */}
-                            <div className="h-6 mb-4 flex items-center">
+                            {/* Days Remaining Countdown */}
+                            <div className="mb-3">
                               {(() => {
                                 if (!listing.expiresAt) {
-                                  // For listings without expiry date, show "No expiry" or calculate from creation date
                                   const createdAt = new Date(listing.createdAt);
                                   const thirtyDaysFromCreation = new Date(createdAt.getTime() + 30 * 24 * 60 * 60 * 1000);
                                   const now = new Date();
@@ -397,18 +392,18 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                             </div>
                           </div>
 
-                          {/* Actions */}
-                          <div className="flex flex-col sm:flex-row lg:flex-col gap-2 flex-shrink-0 mt-auto">
-                            <div className="flex gap-1 sm:gap-2">
+                          {/* Actions - Fixed positioning */}
+                          <div className="flex flex-row sm:flex-col lg:flex-col gap-1 sm:gap-2 flex-shrink-0">
+                            <div className="flex flex-row sm:flex-col gap-1 sm:gap-2">
                               <button
                                 onClick={() => router.push(`/listings/${listing.id}`)}
-                                className="px-2 py-1 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs sm:text-sm text-gray-700 dark:text-gray-300"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs text-gray-700 dark:text-gray-300"
                               >
                                 View
                               </button>
                               <button
                                 onClick={() => router.push(`/listings/${listing.id}/edit`)}
-                                className="px-2 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs"
                               >
                                 Edit
                               </button>
@@ -421,7 +416,7 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                                   return (
                                     <button
                                       onClick={() => handleRenewListing(listing.id)}
-                                      className="px-2 py-1 sm:px-4 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm"
+                                      className="px-2 py-1 sm:px-3 sm:py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs"
                                     >
                                       Renew
                                     </button>
@@ -431,7 +426,7 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
                               })()}
                               <button
                                 onClick={() => handleDeleteListing(listing.id)}
-                                className="px-2 py-1 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs sm:text-sm"
+                                className="px-2 py-1 sm:px-3 sm:py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs"
                               >
                                 Delete
                               </button>
