@@ -69,11 +69,15 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                   </div>
                </div>
                <div className="flex gap-2">
-                  <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300">
+                  <button 
+                     onClick={() => {
+                        navigator.clipboard.writeText(window.location.href);
+                        // You can add a toast notification here if you want
+                        alert('Link copied to clipboard!');
+                     }}
+                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+                  >
                      Share
-                  </button>
-                  <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300">
-                     Save ad
                   </button>
                </div>
             </div>

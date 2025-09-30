@@ -162,7 +162,7 @@ const ListingClient: React.FunctionComponent<ListingClientProps> = ({
                      locationValue={`${listing.city}, ${listing.district}`}
                      listing={listing}
                   />
-                  <div className="order-first  mb-10 md:order-last md:col-span-3">
+                  <div className="order-last md:order-last md:col-span-3 mb-10">
                      <ListingReservation
                         listing={listing}
                         user={listing.user}

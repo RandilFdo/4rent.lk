@@ -60,17 +60,15 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                      <span>📞</span>
                      Call
                   </a>
-                  {listing.whatsappNumber && (
-                     <a 
-                        href={`https://wa.me/94${listing.whatsappNumber.replace(/^0/, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                     >
-                        <span>📱</span>
-                        WhatsApp
-                     </a>
-                  )}
+                  <a 
+                     href={`https://wa.me/94${(listing.whatsappNumber || listing.contactPhone).replace(/^0/, '')}`}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                     <span>📱</span>
+                     WhatsApp
+                  </a>
                </div>
             </div>
          </div>
