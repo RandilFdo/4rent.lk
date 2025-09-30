@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { redirect } from "next/navigation";
 import DashboardClient from "./DashboardClient";
+import prisma from "@/app/libs/prismadb";
 
 const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
@@ -17,7 +18,20 @@ const DashboardPage = async () => {
     redirect("/");
   }
 
-  return <DashboardClient currentUser={currentUser as any} />;
+  // Fetch user's business data
+  const userBusiness = await prisma.business.findFirst({
+    where: { userId: currentUser.id },
+    select: {
+      id: true,
+      businessName: true,
+      status: true,
+      verified: true,
+      trialEndDate: true,
+      nextPaymentDue: true
+    }
+  });
+
+  return <DashboardClient currentUser={currentUser as any} userBusiness={userBusiness} />;
 };
 
 export default DashboardPage;

@@ -10,9 +10,17 @@ import { useRouter } from "next/navigation";
 
 interface DashboardClientProps {
   currentUser: SafeUser;
+  userBusiness?: {
+    id: string;
+    businessName: string;
+    status: string;
+    verified: boolean;
+    trialEndDate: string;
+    nextPaymentDue: string;
+  } | null;
 }
 
-const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
+const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser, userBusiness }) => {
   const [listings, setListings] = useState<SafeListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -208,13 +216,37 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
       <Container>
         <div>
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-6 sm:mb-8">
-            <Heading
-              title="Your Dashboard"
-              subtitle={`Welcome back, ${currentUser.name}! Manage your listings here.`}
-            />
-          </div>
+                      {/* Header */}
+                      <div className="mb-6 sm:mb-8">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                          <div>
+                            <Heading
+                              title="Your Dashboard"
+                              subtitle={`Welcome back, ${currentUser.name}! Manage your listings here.`}
+                            />
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {/* User Status Badge */}
+                            <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-300 ${
+                              userBusiness 
+                                ? 'border-green-400 text-green-600 dark:text-green-400 bg-transparent hover:bg-green-50 dark:hover:bg-green-900/20' 
+                                : 'border-gray-400 text-gray-600 dark:text-gray-400 bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800'
+                            }`}>
+                              <div className={`w-2 h-2 rounded-full mr-2 ${
+                                userBusiness ? 'bg-green-500' : 'bg-gray-500'
+                              }`}></div>
+                              {userBusiness ? (
+                                <span className="flex items-center gap-1">
+                                  <span>Business</span>
+                                  {userBusiness.verified && <span className="text-green-500">✓</span>}
+                                </span>
+                              ) : (
+                                <span>Free</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">

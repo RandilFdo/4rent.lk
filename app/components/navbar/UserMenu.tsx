@@ -58,12 +58,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
    return (
       <div className="relative" ref={menuRef}>
          <div className="flex flex-row items-center gap-2 sm:gap-3">
-            <div
-               onClick={onRent}
-               className="hidden md:block text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
-            >
-               Offer Something 4Rent
-            </div>
+                        <div
+                           onClick={onRent}
+                           className="hidden md:block text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
+                        >
+                           Offer Something 4Rent
+                        </div>
             <div
                onClick={toogleOpen}
                className="p-2 sm:p-3 md:py-1 md:px-2 border-[1px] border-neutral-200 dark:border-gray-600 flex flex-row items-center gap-2 sm:gap-3 rounded-full cursor-pointer hover:shadow-md transition"
