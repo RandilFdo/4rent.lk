@@ -79,7 +79,7 @@ const StaySafeOnlinePage = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
       <Container>
-        <div className="max-w-4xl mx-auto py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto py-4 sm:py-8">
           <Heading
             title="Stay Safe Online"
             subtitle="Essential safety tips for using 4Rent and meeting people online"

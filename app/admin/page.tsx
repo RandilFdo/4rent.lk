@@ -402,50 +402,48 @@ const AdminDashboard = () => {
                             </div>
                             
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="text-lg font-medium text-gray-900 dark:text-white truncate">
-                                    {listing.title}
-                                  </h4>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {listing.mainCategory} - {listing.subCategory}
-                                  </p>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {listing.district}, {listing.city}
-                                  </p>
-                                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    LKR {listing.price.toLocaleString()} {listing.priceUnit}
-                                  </p>
-                                  <p className="text-sm text-gray-500 dark:text-gray-500">
-                                    Posted by {listing.user.name} on {new Date(listing.createdAt).toLocaleDateString()}
-                                  </p>
-                                </div>
-                                
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() => handlePreview(listing)}
-                                    className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                  >
-                                    Preview
-                                  </button>
-                                  <button
-                                    onClick={() => handleApprove(listing.id)}
-                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
-                                  >
-                                    Approve
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      const reason = prompt('Reason for rejection:');
-                                      if (reason) {
-                                        handleReject(listing.id, reason);
-                                      }
-                                    }}
-                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
-                                  >
-                                    Reject
-                                  </button>
-                                </div>
+                              <div>
+                                <h4 className="text-lg font-medium text-gray-900 dark:text-white truncate">
+                                  {listing.title}
+                                </h4>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  {listing.mainCategory} - {listing.subCategory}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  {listing.district}, {listing.city}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  LKR {listing.price.toLocaleString()} {listing.priceUnit}
+                                </p>
+                                <p className="text-sm text-gray-500 dark:text-gray-500">
+                                  Posted by {listing.user.name} on {new Date(listing.createdAt).toLocaleDateString()}
+                                </p>
+                              </div>
+                              
+                              <div className="flex flex-wrap gap-2 mt-4">
+                                <button
+                                  onClick={() => handlePreview(listing)}
+                                  className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                >
+                                  Preview
+                                </button>
+                                <button
+                                  onClick={() => handleApprove(listing.id)}
+                                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                                >
+                                  Approve
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const reason = prompt('Reason for rejection:');
+                                    if (reason) {
+                                      handleReject(listing.id, reason);
+                                    }
+                                  }}
+                                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+                                >
+                                  Reject
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -493,35 +491,33 @@ const AdminDashboard = () => {
                           </div>
                           
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <div className="flex items-center space-x-2">
-                                  <h4 className="text-lg font-medium text-gray-900 dark:text-white truncate">
-                                    {listing.title}
-                                  </h4>
-                                </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  {listing.mainCategory} - {listing.subCategory}
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  {listing.district}, {listing.city} • LKR {listing.price.toLocaleString()} {listing.priceUnit}
-                                </p>
-                                <p className="text-sm text-gray-500 dark:text-gray-500">
-                                  Posted by {listing.user.name} on {new Date(listing.createdAt).toLocaleDateString()}
-                                </p>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2">
+                            <div>
+                              <div className="flex items-center space-x-2 mb-2">
+                                <h4 className="text-lg font-medium text-gray-900 dark:text-white truncate">
+                                  {listing.title}
+                                </h4>
                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(listing.status)}`}>
                                   {listing.status}
                                 </span>
-                                <button
-                                  onClick={() => handlePreview(listing)}
-                                  className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                                >
-                                  Preview
-                                </button>
                               </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {listing.mainCategory} - {listing.subCategory}
+                              </p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {listing.district}, {listing.city} • LKR {listing.price.toLocaleString()} {listing.priceUnit}
+                              </p>
+                              <p className="text-sm text-gray-500 dark:text-gray-500">
+                                Posted by {listing.user.name} on {new Date(listing.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                            
+                            <div className="flex flex-wrap gap-2 mt-4">
+                              <button
+                                onClick={() => handlePreview(listing)}
+                                className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                              >
+                                Preview
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -557,53 +553,51 @@ const AdminDashboard = () => {
                     ) : (
                       inquiries.map((inquiry) => (
                         <div key={inquiry.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-3 mb-2">
-                                <h4 className="text-lg font-medium text-gray-900 dark:text-white">
-                                  {inquiry.subject}
-                                </h4>
-                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                  inquiry.status === 'new' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
-                                  inquiry.status === 'read' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                                  inquiry.status === 'replied' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                                  'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-                                }`}>
-                                  {inquiry.status.toUpperCase()}
-                                </span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400">
-                                  {inquiry.category}
-                                </span>
-                              </div>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                From: {inquiry.name} ({inquiry.email})
-                              </p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                                {inquiry.message}
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-500">
-                                Received: {new Date(inquiry.createdAt).toLocaleString()}
-                              </p>
+                          <div>
+                            <div className="flex items-center space-x-3 mb-2">
+                              <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+                                {inquiry.subject}
+                              </h4>
+                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                inquiry.status === 'new' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+                                inquiry.status === 'read' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                                inquiry.status === 'replied' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                              }`}>
+                                {inquiry.status.toUpperCase()}
+                              </span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {inquiry.category}
+                              </span>
                             </div>
-                            
-                            <div className="flex items-center space-x-2 ml-4">
-                              <a
-                                href={`mailto:${inquiry.email}?subject=Re: ${inquiry.subject}`}
-                                className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                              >
-                                Reply
-                              </a>
-                              <select
-                                value={inquiry.status}
-                                onChange={(e) => handleInquiryStatusChange(inquiry.id, e.target.value)}
-                                className="border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 text-xs"
-                              >
-                                <option value="new">New</option>
-                                <option value="read">Read</option>
-                                <option value="replied">Replied</option>
-                                <option value="closed">Closed</option>
-                              </select>
-                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              From: {inquiry.name} ({inquiry.email})
+                            </p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                              {inquiry.message}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-500">
+                              Received: {new Date(inquiry.createdAt).toLocaleString()}
+                            </p>
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-2 mt-4">
+                            <a
+                              href={`mailto:${inquiry.email}?subject=Re: ${inquiry.subject}`}
+                              className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                            >
+                              Reply
+                            </a>
+                            <select
+                              value={inquiry.status}
+                              onChange={(e) => handleInquiryStatusChange(inquiry.id, e.target.value)}
+                              className="border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 text-xs"
+                            >
+                              <option value="new">New</option>
+                              <option value="read">Read</option>
+                              <option value="replied">Replied</option>
+                              <option value="closed">Closed</option>
+                            </select>
                           </div>
                         </div>
                       ))

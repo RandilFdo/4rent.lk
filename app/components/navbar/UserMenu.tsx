@@ -60,7 +60,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
          <div className="flex flex-row items-center gap-2 sm:gap-3">
                         <div
                            onClick={onRent}
-                           className="hidden md:block text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
+                           className="hidden md:block landscape:hidden text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
                         >
                            Offer Something 4Rent
                         </div>

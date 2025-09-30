@@ -94,7 +94,7 @@ const FAQPage = () => {
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
       <Container>
-        <div className="max-w-4xl mx-auto py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto py-4 sm:py-8">
           <Heading
             title="Frequently Asked Questions"
             subtitle="Find answers to common questions about using 4Rent"
