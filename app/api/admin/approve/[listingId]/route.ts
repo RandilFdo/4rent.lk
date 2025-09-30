@@ -28,13 +28,18 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       return NextResponse.json({ error: "Invalid listing ID" }, { status: 400 });
     }
 
-    // Update listing status to APPROVED
+    // Update listing status to APPROVED and set expiry date
     console.log('Attempting to approve listing:', listingId);
+    
+    // Set expiry date to 30 days from now
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 30);
     
     const updatedListing = await prisma.listing.update({
       where: { id: listingId },
       data: { 
         status: "APPROVED",
+        expiresAt: expiresAt,
         updatedAt: new Date()
       }
     });

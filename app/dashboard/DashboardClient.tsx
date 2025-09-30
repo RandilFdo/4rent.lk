@@ -90,17 +90,18 @@ const DashboardClient: React.FC<DashboardClientProps> = ({ currentUser }) => {
     }
 
     try {
-      const response = await fetch(`/api/listings/${listingId}`, {
+      const response = await fetch(`/api/listings/${listingId}/renew`, {
         method: 'POST',
       });
 
       if (response.ok) {
+        const data = await response.json();
         // Refresh the listings to show updated expiration date
         fetchUserListings();
-        alert('Listing renewed successfully for another 30 days!');
+        alert(data.message || 'Listing renewed successfully for another 30 days!');
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to renew listing');
+        alert(error.error || 'Failed to renew listing');
       }
     } catch (error) {
       console.error('Error renewing listing:', error);
