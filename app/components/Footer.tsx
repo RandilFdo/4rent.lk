@@ -12,29 +12,29 @@ const Footer = () => {
     <footer className={`${isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-700 text-gray-200'}`}>
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           
           {/* More from 4Rent */}
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className={`font-bold text-base sm:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>More from 4Rent</h3>
-            <ul className="space-y-1.5 sm:space-y-2">
+          <div className="space-y-2 sm:space-y-4">
+            <h3 className={`font-bold text-xs sm:text-base lg:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>More from 4Rent</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/post" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/post" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   List Property
                 </Link>
               </li>
               <li>
-                <Link href="/business-registration" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/business-registration" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Business Registration
                 </Link>
               </li>
               <li>
-                <Link href="/advertising" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/advertising" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Banner Ads
                 </Link>
               </li>
               <li>
-                <Link href="/boost" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/boost" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Boost Ad
                 </Link>
               </li>
@@ -42,21 +42,21 @@ const Footer = () => {
           </div>
 
           {/* Help & Support */}
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className={`font-bold text-base sm:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>Help & Support</h3>
-            <ul className="space-y-1.5 sm:space-y-2">
+          <div className="space-y-2 sm:space-y-4">
+            <h3 className={`font-bold text-xs sm:text-base lg:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>Help & Support</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/faq" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/faq" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/safety" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/safety" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Stay Safe
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/contact" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Contact Us
                 </Link>
               </li>
@@ -64,38 +64,38 @@ const Footer = () => {
           </div>
 
           {/* About 4Rent */}
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className={`font-bold text-base sm:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>About 4Rent</h3>
-            <ul className="space-y-1.5 sm:space-y-2">
+          <div className="space-y-2 sm:space-y-4">
+            <h3 className={`font-bold text-xs sm:text-base lg:text-lg ${isDarkMode ? 'text-gray-200' : 'text-white'}`}>About 4Rent</h3>
+            <ul className="space-y-1 sm:space-y-2">
               <li>
-                <Link href="/about" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/about" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/careers" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Careers
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/terms" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Terms and Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/privacy" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/sitemap" className={`text-sm sm:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/sitemap" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Sitemap
                 </Link>
               </li>
             </ul>
             
             {/* Social Media Icons */}
-            <div className="flex space-x-3 sm:space-x-4 pt-3 sm:pt-4">
+            <div className="flex space-x-2 sm:space-x-3 lg:space-x-4 pt-2 sm:pt-4">
               <a 
                 href="https://facebook.com" 
                 target="_blank" 
@@ -103,7 +103,7 @@ const Footer = () => {
                 className={`${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-300 hover:text-white'} transition-colors`}
                 aria-label="Facebook"
               >
-                <FaFacebookF size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <FaFacebookF size={14} className="sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
               </a>
               <a 
                 href="https://twitter.com" 
@@ -112,7 +112,7 @@ const Footer = () => {
                 className={`${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-300 hover:text-white'} transition-colors`}
                 aria-label="Twitter"
               >
-                <FaTwitter size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <FaTwitter size={14} className="sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
               </a>
               <a 
                 href="https://tiktok.com" 
@@ -121,7 +121,7 @@ const Footer = () => {
                 className={`${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-300 hover:text-white'} transition-colors`}
                 aria-label="TikTok"
               >
-                <FaTiktok size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <FaTiktok size={14} className="sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
               </a>
               <a 
                 href="https://youtube.com" 
@@ -130,7 +130,7 @@ const Footer = () => {
                 className={`${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-300 hover:text-white'} transition-colors`}
                 aria-label="YouTube"
               >
-                <FaYoutube size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <FaYoutube size={14} className="sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
               </a>
             </div>
           </div>
