@@ -11,11 +11,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { businessName, contactInfo } = await request.json();
+    const { 
+      businessName, 
+      contactPerson, 
+      contactNumber, 
+      contactEmail, 
+      category, 
+      description, 
+      address, 
+      logoUrl 
+    } = await request.json();
 
-    if (!businessName || !contactInfo?.phone || !contactInfo?.email) {
+    if (!businessName || !contactPerson || !contactNumber || !contactEmail) {
       return NextResponse.json(
-        { error: 'Business name, phone, and email are required' },
+        { error: 'Business name, contact person, contact number, and contact email are required' },
         { status: 400 }
       );
     }
@@ -50,15 +59,18 @@ export async function POST(request: NextRequest) {
       data: {
         userId: user.id,
         businessName,
-        contactInfo: {
-          phone: contactInfo.phone,
-          email: contactInfo.email,
-          address: contactInfo.address || ''
-        },
+        logoUrl: logoUrl || null,
+        contactPerson,
+        contactNumber,
+        contactEmail,
+        category: category || null,
+        description: description || null,
+        address: address || null,
         status: 'trial',
         trialEndDate,
         nextPaymentDue: trialEndDate,
-        isVerified: false
+        autoRenew: false,
+        verified: true // Verified during trial period
       }
     });
 
@@ -67,11 +79,17 @@ export async function POST(request: NextRequest) {
       business: {
         id: business.id,
         businessName: business.businessName,
-        contactInfo: business.contactInfo,
+        logoUrl: business.logoUrl,
+        contactPerson: business.contactPerson,
+        contactNumber: business.contactNumber,
+        contactEmail: business.contactEmail,
+        category: business.category,
+        description: business.description,
+        address: business.address,
         status: business.status,
         trialEndDate: business.trialEndDate,
         nextPaymentDue: business.nextPaymentDue,
-        isVerified: business.isVerified
+        verified: business.verified
       }
     });
 

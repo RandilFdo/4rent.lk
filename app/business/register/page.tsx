@@ -9,23 +9,20 @@ import Button from '@/app/components/Button';
 import Input from '@/app/components/inputs/Input';
 import { toast } from 'react-hot-toast';
 
-interface ContactInfo {
-  phone: string;
-  email: string;
-  address: string;
-}
-
 const BusinessRegisterPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     businessName: '',
-    contactInfo: {
-      phone: '',
-      email: '',
-      address: ''
-    } as ContactInfo
+    contactPerson: '',
+    contactNumber: '',
+    contactEmail: '',
+    category: '',
+    description: '',
+    address: ''
   });
 
   if (status === 'loading') {
@@ -42,20 +39,21 @@ const BusinessRegisterPage = () => {
   }
 
   const handleInputChange = (field: string, value: string) => {
-    if (field.startsWith('contactInfo.')) {
-      const contactField = field.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        contactInfo: {
-          ...prev.contactInfo,
-          [contactField]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [field]: value
-      }));
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setLogoFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setLogoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -64,18 +62,39 @@ const BusinessRegisterPage = () => {
     setIsLoading(true);
 
     try {
+      // Upload logo if provided
+      let logoUrl = '';
+      if (logoFile) {
+        const formData = new FormData();
+        formData.append('file', logoFile);
+        formData.append('upload_preset', '4rent-business-logos'); // Cloudinary preset
+
+        const uploadResponse = await fetch('https://api.cloudinary.com/v1_1/your-cloud-name/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (uploadResponse.ok) {
+          const uploadData = await uploadResponse.json();
+          logoUrl = uploadData.secure_url;
+        }
+      }
+
       const response = await fetch('/api/business/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          logoUrl
+        }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        toast.success('Business registered successfully!');
+        toast.success('Business registered successfully! Your 30-day free trial has started.');
         router.push('/business/dashboard');
       } else {
         toast.error(data.error || 'Registration failed');
@@ -116,42 +135,115 @@ const BusinessRegisterPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Phone Number *
+                  Contact Person Name *
                 </label>
                 <Input
-                  id="phone"
+                  id="contactPerson"
+                  label=""
+                  type="text"
+                  value={formData.contactPerson}
+                  onChange={(e) => handleInputChange('contactPerson', e.target.value)}
+                  placeholder="Enter contact person name"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Contact Phone Number *
+                </label>
+                <Input
+                  id="contactNumber"
                   label=""
                   type="tel"
-                  value={formData.contactInfo.phone}
-                  onChange={(e) => handleInputChange('contactInfo.phone', e.target.value)}
-                  placeholder="Enter your phone number"
+                  value={formData.contactNumber}
+                  onChange={(e) => handleInputChange('contactNumber', e.target.value)}
+                  placeholder="Enter contact phone number"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Email Address *
+                  Contact Email Address *
                 </label>
                 <Input
-                  id="email"
+                  id="contactEmail"
                   label=""
                   type="email"
-                  value={formData.contactInfo.email}
-                  onChange={(e) => handleInputChange('contactInfo.email', e.target.value)}
-                  placeholder="Enter your email address"
+                  value={formData.contactEmail}
+                  onChange={(e) => handleInputChange('contactEmail', e.target.value)}
+                  placeholder="Enter contact email address"
                   required
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Business Address
+                  Business Category (Optional)
+                </label>
+                <select
+                  id="category"
+                  value={formData.category}
+                  onChange={(e) => handleInputChange('category', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="">Select a category (optional)</option>
+                  <option value="real-estate">Real Estate</option>
+                  <option value="vehicle-rental">Vehicle Rental</option>
+                  <option value="tourism">Tourism & Travel</option>
+                  <option value="hospitality">Hospitality</option>
+                  <option value="events">Events & Entertainment</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Business Logo
+                </label>
+                <div className="space-y-3">
+                  <input
+                    type="file"
+                    id="logo"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  />
+                  {logoPreview && (
+                    <div className="mt-2">
+                      <img
+                        src={logoPreview}
+                        alt="Logo preview"
+                        className="h-20 w-20 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Short Description
+                </label>
+                <textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  placeholder="Brief description of your business"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Business Address (Optional)
                 </label>
                 <textarea
                   id="address"
-                  value={formData.contactInfo.address}
-                  onChange={(e) => handleInputChange('contactInfo.address', e.target.value)}
+                  value={formData.address}
+                  onChange={(e) => handleInputChange('address', e.target.value)}
                   placeholder="Enter your business address"
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   rows={3}
