@@ -29,7 +29,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/advertising" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
+                <Link href="/banner-ads" className={`text-xs sm:text-sm lg:text-base hover:${isDarkMode ? 'text-white' : 'text-white'} transition-colors`}>
                   Banner Ads
                 </Link>
               </li>
