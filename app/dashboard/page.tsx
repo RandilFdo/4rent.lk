@@ -31,7 +31,14 @@ const DashboardPage = async () => {
     }
   });
 
-  return <DashboardClient currentUser={currentUser as any} userBusiness={userBusiness} />;
+  // Convert Date objects to strings for the component
+  const userBusinessWithStringDates = userBusiness ? {
+    ...userBusiness,
+    trialEndDate: userBusiness.trialEndDate.toISOString(),
+    nextPaymentDue: userBusiness.nextPaymentDue.toISOString()
+  } : null;
+
+  return <DashboardClient currentUser={currentUser as any} userBusiness={userBusinessWithStringDates} />;
 };
 
 export default DashboardPage;

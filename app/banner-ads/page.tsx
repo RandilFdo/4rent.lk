@@ -2,7 +2,7 @@
 
 import Container from '@/app/components/Container';
 import Heading from '@/app/components/Heading';
-import { CheckCircleIcon, EnvelopeIcon, PhotoIcon, CurrencyDollarIcon, ClockIcon, MapPinIcon, LinkIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, EnvelopeIcon, PhotoIcon, CurrencyDollarIcon, ClockIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
 const BannerAdsPage = () => {
   return (

@@ -12,7 +12,7 @@ const FeaturedSuccessPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const orderId = searchParams.get('orderId');
+    const orderId = searchParams?.get('orderId');
     
     if (!orderId) {
       setError('Invalid order ID');

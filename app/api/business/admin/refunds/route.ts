@@ -25,7 +25,9 @@ export async function GET(request: NextRequest) {
         business: {
           select: {
             businessName: true,
-            contactInfo: true
+            contactPerson: true,
+            contactNumber: true,
+            contactEmail: true
           }
         },
         user: {

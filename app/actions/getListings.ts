@@ -158,7 +158,7 @@ export default async function getListings(params: IListingParams) {
       // Keyword search filter
       if (search) {
          const searchTerm = search.toLowerCase();
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             // Search in title, description, and attributes
             const titleMatch = listing.title.toLowerCase().includes(searchTerm);
             const descriptionMatch = listing.description.toLowerCase().includes(searchTerm);
@@ -196,7 +196,7 @@ export default async function getListings(params: IListingParams) {
 
       // Vehicle-specific filters
       if (mainCategory === "VEHICLE" || category === "VEHICLE") {
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             if (vehicleType && listing.vehicleAttributes) {
                const vehicle = listing.vehicleAttributes as any;
                if (vehicle.vehicleType !== vehicleType) return false;
@@ -211,7 +211,7 @@ export default async function getListings(params: IListingParams) {
 
       // Property-specific filters
       if (mainCategory === "PROPERTY" || category === "PROPERTY") {
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             if (propertyType && listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
                if (property.propertyType !== propertyType) return false;
@@ -230,7 +230,7 @@ export default async function getListings(params: IListingParams) {
 
       // Experience-specific filters
       if (mainCategory === "EXPERIENCE") {
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             if (experienceType && listing.experienceAttributes) {
                const experience = listing.experienceAttributes as any;
                if (experience.experienceType !== experienceType) return false;
@@ -249,7 +249,7 @@ export default async function getListings(params: IListingParams) {
 
       // Legacy property filters
       if (roomCount) {
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             if (listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
                return property.bedrooms >= roomCount;
@@ -258,7 +258,7 @@ export default async function getListings(params: IListingParams) {
          });
       }
       if (guestCount) {
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             if (listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
                return property.bedrooms >= Math.ceil(guestCount / 2);
@@ -267,7 +267,7 @@ export default async function getListings(params: IListingParams) {
          });
       }
       if (bathroomCount) {
-         filteredListings = filteredListings.filter((listing) => {
+         filteredListings = filteredListings.filter((listing: any) => {
             if (listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
                return property.bathrooms >= bathroomCount;
@@ -305,9 +305,9 @@ export default async function getListings(params: IListingParams) {
       });
 
       // Sort by ranking score (descending)
-      rankedListings.sort((a, b) => b.rankingScore - a.rankingScore);
+      rankedListings.sort((a: any, b: any) => b.rankingScore - a.rankingScore);
 
-      const safeListings = rankedListings.map((listing) => ({
+      const safeListings = rankedListings.map((listing: any) => ({
          ...listing,
          createdAt: listing.createdAt.toISOString(),
          updatedAt: listing.updatedAt.toISOString(),

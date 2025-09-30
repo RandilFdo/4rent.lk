@@ -95,24 +95,24 @@ export async function GET(request: NextRequest) {
 
     // 4. Update businessVerified flag for listings from expired businesses
     try {
-      const expiredBusinessIds = await prisma.business.findMany({
-        where: { status: 'expired' },
-        select: { id: true }
-      });
-
-      if (expiredBusinessIds.length > 0) {
-        await prisma.listing.updateMany({
-          where: {
-            businessId: {
-              in: expiredBusinessIds.map(b => b.id)
-            }
-          },
-          data: {
-            businessVerified: false
-          }
+        const expiredBusinessIds = await prisma.business.findMany({
+          where: { status: 'expired' },
+          select: { id: true }
         });
-        console.log(`Updated businessVerified flag for listings from ${expiredBusinessIds.length} expired businesses`);
-      }
+
+        if (expiredBusinessIds.length > 0) {
+          await prisma.listing.updateMany({
+            where: {
+              businessId: {
+                in: expiredBusinessIds.map((b: any) => b.id)
+              }
+            },
+            data: {
+              businessVerified: false
+            }
+          });
+          console.log(`Updated businessVerified flag for listings from ${expiredBusinessIds.length} expired businesses`);
+        }
     } catch (error: any) {
       results.errors.push(`Business verification update error: ${error.message}`);
     }
