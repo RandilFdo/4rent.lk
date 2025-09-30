@@ -14,6 +14,8 @@ import SearchModal from "./components/modals/SearchModal";
 import ConditionalLayout from "./components/ConditionalLayout";
 import Footer from "./components/Footer";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import SWRProvider from "./providers/SWRProvider";
+import PrefetchData from "./components/PrefetchData";
 
 // const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({
@@ -52,14 +54,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
          </head>
          <body className={nunito.className}>
             <SessionProvider>
-               <ClientOnly>
-                  <ToasterProvider />
-                  <SearchModal />
-                  <RentModal />
-                  <LoginModal />
-                  <RegisterModal />
-                   <Navbar currentUser={currentUser as any} />
-               </ClientOnly>
+               <SWRProvider>
+                  <ClientOnly>
+                     <ToasterProvider />
+                     <SearchModal />
+                     <RentModal />
+                     <LoginModal />
+                     <RegisterModal />
+                      <Navbar currentUser={currentUser as any} />
+                  </ClientOnly>
                <div className="min-h-screen flex flex-col">
                   <ConditionalLayout>{children}</ConditionalLayout>
                   <div className="mt-auto">
@@ -67,6 +70,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   </div>
                </div>
                <SpeedInsights />
+               <PrefetchData />
+               </SWRProvider>
             </SessionProvider>
          </body>
       </html>

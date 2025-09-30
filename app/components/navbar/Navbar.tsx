@@ -5,6 +5,7 @@ import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import { SafeUser } from "@/app/types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 interface NavbarProps {
    currentUser?: SafeUser | null;
@@ -45,9 +46,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
                   {/* Navigation Tabs - Centered on desktop */}
                   <div className="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-full p-1 absolute left-1/2 transform -translate-x-1/2">
                      {navItems.map((item) => (
-                        <button
+                        <Link
                            key={item.label}
-                           onClick={() => router.push(item.href)}
+                           href={item.href}
+                           prefetch={true}
                            className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
                               isActive(item.href)
                                  ? "bg-white dark:bg-gray-700 shadow-md text-blue-600 dark:text-blue-400 font-medium"
@@ -56,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => {
                         >
                            <span className="text-lg">{item.icon}</span>
                            <span className="text-sm">{item.label}</span>
-                        </button>
+                        </Link>
                      ))}
                   </div>
 

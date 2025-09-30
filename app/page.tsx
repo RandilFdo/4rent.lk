@@ -1,12 +1,14 @@
-﻿export const dynamic = "force-dynamic";
+﻿export const revalidate = 30; // ISR - revalidate every 30 seconds
 import { Metadata } from "next";
+import { Suspense } from "react";
 import getCurrentUser from "./actions/getCurrentUser";
 import getListings, { IListingParams } from "./actions/getListings";
 import ClientOnly from "./components/ClientOnly";
 import Container from "./components/Container";
 import EmptyState from "./components/EmptyState";
-import ListingCard from "./components/listings/ListingCard";
 import SearchBar from "./components/SearchBar";
+import ListingsGrid from "./components/ListingsGrid";
+import CriticalLoader from "./components/CriticalLoader";
 import { MainCategory } from "./types";
 
 export const metadata: Metadata = {
@@ -75,19 +77,18 @@ const Home = async ({ searchParams }: HomeProps) => {
                      </div>
                   )}
                   
-                  {listings.length === 0 ? (
-                     <EmptyState 
-                        showReset 
-                        title={searchQuery ? `No results found for "${searchQuery}"` : "No listings found"}
-                        subTitle="Try adjusting your search terms or filter criteria"
+                  <Suspense fallback={<CriticalLoader />}>
+                     <ListingsGrid 
+                        currentUser={currentUser} 
+                        searchQuery={searchQuery}
+                        mainCategory={searchParams.mainCategory}
+                        subCategory={searchParams.category}
+                        district={searchParams.district}
+                        city={searchParams.city}
+                        minPrice={searchParams.minPrice?.toString()}
+                        maxPrice={searchParams.maxPrice?.toString()}
                      />
-                  ) : (
-                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 items-stretch">
-                        {listings.map((listing: any) => (
-                             <ListingCard key={listing.id} data={listing} currentUser={currentUser} />
-                       ))}
-                     </div>
-                  )}
+                  </Suspense>
                </Container>
             </div>
          </ClientOnly>

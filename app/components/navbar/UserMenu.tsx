@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import useRentModal from "@/app/hooks/useRentModal";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import useDarkMode from "@/app/hooks/useDarkMode";
 
 interface UserMenuProps {
@@ -82,14 +83,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
                      <>
                         <div className="md:hidden border-b border-gray-200 dark:border-gray-700">
                            {navItems.map((item) => (
-                              <MenuItem
+                              <Link
                                  key={item.label}
-                                 onClick={() => {
-                                    router.push(item.href);
-                                    setIsOpen(false);
-                                 }}
-                                 label={`${item.icon} ${item.label}`}
-                              />
+                                 href={item.href}
+                                 prefetch={true}
+                                 onClick={() => setIsOpen(false)}
+                                 className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                              >
+                                 {item.icon} {item.label}
+                              </Link>
                            ))}
                         </div>
                      </>
