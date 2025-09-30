@@ -146,7 +146,7 @@ const ExperiencesPage = () => {
                 </div>
 
                 {/* Experience Categories */}
-                <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-5 gap-2 sm:gap-3 max-w-4xl mx-auto mb-16 sm:mb-24">
+                <div className="grid grid-cols-5 gap-2 sm:gap-3 max-w-4xl mx-auto mb-16 sm:mb-24">
                   {experienceCategories.map((category, index) => (
                     <div
                       key={category.type}

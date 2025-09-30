@@ -111,7 +111,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
                            }}
                            label="Dashboard"
                         />
-                        <MenuItem onClick={() => { router.push('/post'); setIsOpen(false); }} label="Offer Something 4Rent" />
+                        <MenuItem onClick={() => { router.push('/post'); setIsOpen(false); }} label="Offer Something 4Rent" isSpecial={true} />
                         <MenuItem
                            onClick={() => {
                               router.push('/business/register');
