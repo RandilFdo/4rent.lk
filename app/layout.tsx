@@ -29,9 +29,14 @@ export const metadata: Metadata = {
    title: "4Rent - Sri Lanka's Premier Rental Marketplace",
    description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
    icons: {
-     icon: '/images/tablogo.png',
-     shortcut: '/images/tablogo.png',
-     apple: '/images/tablogo.png',
+     icon: [
+       { url: '/favicon.ico', sizes: 'any' },
+       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+       { url: '/favicon-64x64.png', sizes: '64x64', type: 'image/png' },
+       { url: '/images/tablogo.png', type: 'image/png' },
+     ],
+     shortcut: '/favicon-64x64.png',
+     apple: '/favicon-64x64.png',
    },
    viewport: 'width=device-width, initial-scale=1',
    robots: 'index, follow',
@@ -48,6 +53,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
    return (
       <html lang="en">
          <head>
+            <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+            <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+            <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
+            <link rel="icon" type="image/png" href="/images/tablogo.png" />
+            <link rel="apple-touch-icon" sizes="64x64" href="/favicon-64x64.png" />
             <link rel="preload" href="/images/black logo.png" as="image" type="image/png" />
             <link rel="preload" href="/images/white logo.png" as="image" type="image/png" />
             <link rel="dns-prefetch" href="//fonts.googleapis.com" />
