@@ -47,8 +47,10 @@ export default function DynamicOpenGraph({
       
       {/* Additional OpenGraph Properties */}
       {price && (
-        <meta property="product:price:amount" content={price.toString()} />
-        <meta property="product:price:currency" content="LKR" />
+        <>
+          <meta property="product:price:amount" content={price.toString()} />
+          <meta property="product:price:currency" content="LKR" />
+        </>
       )}
       {category && <meta property="article:section" content={category} />}
       {location && <meta property="place:location:latitude" content="" />}
