@@ -9,11 +9,12 @@ export interface IListingParams {
    city?: string;
    minPrice?: number | string;
    maxPrice?: number | string;
+   priceUnit?: string; // per day, per week, per month, per year
    vehicleType?: VehicleType;
-   seats?: number;
+   seats?: number | string;
    propertyType?: PropertyType;
-   bedrooms?: number;
-   bathrooms?: number;
+   bedrooms?: number | string;
+   bathrooms?: number | string;
    experienceType?: ExperienceType;
    maxParticipants?: number;
    difficultyLevel?: string;
@@ -36,6 +37,7 @@ export default async function getListings(params: IListingParams) {
          city,
          minPrice,
          maxPrice,
+         priceUnit,
          vehicleType,
          seats,
          propertyType,
@@ -186,6 +188,13 @@ export default async function getListings(params: IListingParams) {
          });
       }
 
+      // Price unit filter
+      if (priceUnit) {
+         filteredListings = filteredListings.filter((listing: any) => {
+            return listing.priceUnit?.toLowerCase().includes(priceUnit.toLowerCase());
+         });
+      }
+
       // Vehicle-specific filters
       if (mainCategory === "VEHICLE" || category === "VEHICLE") {
          filteredListings = filteredListings.filter((listing: any) => {
@@ -195,7 +204,8 @@ export default async function getListings(params: IListingParams) {
             }
             if (seats && listing.vehicleAttributes) {
                const vehicle = listing.vehicleAttributes as any;
-               if (vehicle.seats < seats) return false;
+               const seatsNum = typeof seats === 'string' ? parseInt(seats) : seats;
+               if (vehicle.seats < seatsNum) return false;
             }
             return true;
          });
@@ -210,11 +220,13 @@ export default async function getListings(params: IListingParams) {
             }
             if (bedrooms && listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
-               if (property.bedrooms < bedrooms) return false;
+               const bedroomsNum = typeof bedrooms === 'string' ? parseInt(bedrooms) : bedrooms;
+               if (property.bedrooms < bedroomsNum) return false;
             }
             if (bathrooms && listing.propertyAttributes) {
                const property = listing.propertyAttributes as any;
-               if (property.bathrooms < bathrooms) return false;
+               const bathroomsNum = typeof bathrooms === 'string' ? parseInt(bathrooms) : bathrooms;
+               if (property.bathrooms < bathroomsNum) return false;
             }
             return true;
          });

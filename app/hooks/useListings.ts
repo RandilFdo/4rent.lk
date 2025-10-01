@@ -11,6 +11,12 @@ interface UseListingsProps {
   city?: string;
   minPrice?: string;
   maxPrice?: string;
+  priceUnit?: string;
+  vehicleType?: string;
+  seats?: string;
+  propertyType?: string;
+  bedrooms?: string;
+  bathrooms?: string;
   search?: string;
   userId?: string;
 }
@@ -23,6 +29,12 @@ export const useListings = (params: UseListingsProps = {}) => {
     city,
     minPrice,
     maxPrice,
+    priceUnit,
+    vehicleType,
+    seats,
+    propertyType,
+    bedrooms,
+    bathrooms,
     search,
     userId
   } = params;
@@ -35,6 +47,12 @@ export const useListings = (params: UseListingsProps = {}) => {
   if (city) queryParams.set('city', city);
   if (minPrice) queryParams.set('minPrice', minPrice);
   if (maxPrice) queryParams.set('maxPrice', maxPrice);
+  if (priceUnit) queryParams.set('priceUnit', priceUnit);
+  if (vehicleType) queryParams.set('vehicleType', vehicleType);
+  if (seats) queryParams.set('seats', seats);
+  if (propertyType) queryParams.set('propertyType', propertyType);
+  if (bedrooms) queryParams.set('bedrooms', bedrooms);
+  if (bathrooms) queryParams.set('bathrooms', bathrooms);
   if (search) queryParams.set('search', search);
   if (userId) queryParams.set('userId', userId);
 

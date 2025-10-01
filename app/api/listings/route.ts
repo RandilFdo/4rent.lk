@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import prisma from '@/app/libs/prismadb';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import getListings from '@/app/actions/getListings';
 
 export async function POST(request: NextRequest) {
   try {
@@ -108,97 +109,41 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    const search = searchParams.get('search'); // Add search parameter
-    const mainCategory = searchParams.get('mainCategory');
-    const subCategory = searchParams.get('subCategory');
-    const district = searchParams.get('district');
-    const city = searchParams.get('city');
-    const minPrice = searchParams.get('minPrice');
-    const maxPrice = searchParams.get('maxPrice');
-    const expiringSoon = searchParams.get('expiringSoon'); // New parameter
+         const userId = searchParams.get('userId');
+         const search = searchParams.get('search'); // Add search parameter
+         const mainCategory = searchParams.get('mainCategory');
+         const subCategory = searchParams.get('subCategory');
+         const district = searchParams.get('district');
+         const city = searchParams.get('city');
+         const minPrice = searchParams.get('minPrice');
+         const maxPrice = searchParams.get('maxPrice');
+         const priceUnit = searchParams.get('priceUnit');
+         const vehicleType = searchParams.get('vehicleType');
+         const seats = searchParams.get('seats');
+         const propertyType = searchParams.get('propertyType');
+         const bedrooms = searchParams.get('bedrooms');
+         const bathrooms = searchParams.get('bathrooms');
+         const expiringSoon = searchParams.get('expiringSoon'); // New parameter
 
-    let query: any = {};
-
-    // If userId is provided, get all listings for that user (including pending/rejected)
-    // Otherwise, only show approved listings
-    if (userId) {
-      query.userId = userId;
-    } else {
-      query.status = 'APPROVED';
-      // Note: expiresAt field is not available in current schema
-    }
-
-    // Note: expiringSoon functionality disabled until expiresAt field is added to schema
-    // if (expiringSoon === 'true') {
-    //   const now = new Date();
-    //   const fiveDaysFromNow = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
-    //   query.expiresAt = { gte: now, lte: fiveDaysFromNow };
-    // }
-
-    if (mainCategory) query.mainCategory = mainCategory;
-    if (subCategory) query.subCategory = subCategory;
-    if (district) query.district = district;
-    if (city) query.city = city;
-    if (minPrice) query.price = { ...query.price, gte: parseInt(minPrice) };
-    if (maxPrice) query.price = { ...query.price, lte: parseInt(maxPrice) };
-
-    const listings = await prisma.listing.findMany({
-      where: query,
-      orderBy: [
-        { createdAt: 'desc' }
-      ],
-      include: {
-        user: {
-          select: {
-            name: true,
-            image: true
-          }
-        }
-      }
+    // Use the getListings action for consistent filtering
+    const listings = await getListings({
+      userId: userId || undefined,
+      search: search || undefined,
+      mainCategory: mainCategory as any,
+      district: district || undefined,
+      city: city || undefined,
+      minPrice: minPrice ? parseInt(minPrice) : undefined,
+      maxPrice: maxPrice ? parseInt(maxPrice) : undefined,
+      priceUnit: priceUnit || undefined,
+      vehicleType: vehicleType as any,
+      seats: seats ? parseInt(seats) : undefined,
+      propertyType: propertyType as any,
+      bedrooms: bedrooms ? parseInt(bedrooms) : undefined,
+      bathrooms: bathrooms ? parseInt(bathrooms) : undefined,
     });
 
-    // Apply search filter if search term is provided
-    let filteredListings = listings;
-    if (search && search.trim()) {
-      const searchTerm = search.toLowerCase().trim();
-      filteredListings = listings.filter((listing: any) => {
-        // Search in title, description, and attributes
-        const titleMatch = listing.title.toLowerCase().includes(searchTerm);
-        const descriptionMatch = listing.description.toLowerCase().includes(searchTerm);
-        const districtMatch = listing.district?.toLowerCase().includes(searchTerm);
-        const cityMatch = listing.city?.toLowerCase().includes(searchTerm);
-        
-        // Search in vehicle attributes
-        let vehicleMatch = false;
-        if (listing.vehicleAttributes) {
-          const vehicle = listing.vehicleAttributes as any;
-          vehicleMatch = 
-            (vehicle.brand && vehicle.brand.toLowerCase().includes(searchTerm)) ||
-            (vehicle.model && vehicle.model.toLowerCase().includes(searchTerm)) ||
-            (vehicle.vehicleType && vehicle.vehicleType.toLowerCase().includes(searchTerm));
-        }
-        
-        // Search in property attributes
-        let propertyMatch = false;
-        if (listing.propertyAttributes) {
-          const property = listing.propertyAttributes as any;
-          propertyMatch = 
-            (property.propertyType && property.propertyType.toLowerCase().includes(searchTerm));
-        }
-        
-        // Search in experience attributes
-        let experienceMatch = false;
-        if (listing.experienceAttributes) {
-          const experience = listing.experienceAttributes as any;
-          experienceMatch = 
-            (experience.experienceType && experience.experienceType.toLowerCase().includes(searchTerm)) ||
-            (experience.languages && experience.languages.some((lang: string) => lang.toLowerCase().includes(searchTerm)));
-        }
-        
-        return titleMatch || descriptionMatch || districtMatch || cityMatch || vehicleMatch || propertyMatch || experienceMatch;
-      });
-    }
+    // Search filtering is already handled in getListings action
+    const filteredListings = listings;
 
     const response = NextResponse.json(filteredListings);
     

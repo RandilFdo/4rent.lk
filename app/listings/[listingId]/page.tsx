@@ -19,7 +19,9 @@ export async function generateMetadata({ params }: { params: IParams }): Promise
 
    const title = `${listing.title} | 4Rent Sri Lanka`;
    const description = `${listing.description.substring(0, 160)}... Located in ${listing.city}, ${listing.district}. Price: LKR ${listing.price.toLocaleString()}`;
-   const image = listing.images?.[0] || '/images/placeholder.jpg';
+   const image = listing.images?.[0] 
+      ? (listing.images[0].startsWith('http') ? listing.images[0] : `https://4rent-lk-66uy.vercel.app${listing.images[0]}`)
+      : 'https://4rent-lk-66uy.vercel.app/images/white logo.png';
    const url = `https://4rent-lk-66uy.vercel.app/listings/${listing.id}`;
 
    return {

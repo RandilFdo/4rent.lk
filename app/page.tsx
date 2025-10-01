@@ -70,7 +70,7 @@ const Home = async ({ searchParams }: HomeProps) => {
          <ClientOnly>
             {/* Search Bar Centered */}
             <div className="flex justify-center py-12 sm:py-24 pt-24 sm:pt-36">
-               <div className="w-full max-w-2xl px-4">
+               <div className="w-full px-4">
                   <SearchBar />
                </div>
             </div>
