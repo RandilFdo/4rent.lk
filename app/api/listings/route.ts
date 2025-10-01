@@ -109,6 +109,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
+    const search = searchParams.get('search'); // Add search parameter
     const mainCategory = searchParams.get('mainCategory');
     const subCategory = searchParams.get('subCategory');
     const district = searchParams.get('district');
@@ -157,7 +158,49 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    const response = NextResponse.json(listings);
+    // Apply search filter if search term is provided
+    let filteredListings = listings;
+    if (search && search.trim()) {
+      const searchTerm = search.toLowerCase().trim();
+      filteredListings = listings.filter((listing: any) => {
+        // Search in title, description, and attributes
+        const titleMatch = listing.title.toLowerCase().includes(searchTerm);
+        const descriptionMatch = listing.description.toLowerCase().includes(searchTerm);
+        const districtMatch = listing.district?.toLowerCase().includes(searchTerm);
+        const cityMatch = listing.city?.toLowerCase().includes(searchTerm);
+        
+        // Search in vehicle attributes
+        let vehicleMatch = false;
+        if (listing.vehicleAttributes) {
+          const vehicle = listing.vehicleAttributes as any;
+          vehicleMatch = 
+            (vehicle.brand && vehicle.brand.toLowerCase().includes(searchTerm)) ||
+            (vehicle.model && vehicle.model.toLowerCase().includes(searchTerm)) ||
+            (vehicle.vehicleType && vehicle.vehicleType.toLowerCase().includes(searchTerm));
+        }
+        
+        // Search in property attributes
+        let propertyMatch = false;
+        if (listing.propertyAttributes) {
+          const property = listing.propertyAttributes as any;
+          propertyMatch = 
+            (property.propertyType && property.propertyType.toLowerCase().includes(searchTerm));
+        }
+        
+        // Search in experience attributes
+        let experienceMatch = false;
+        if (listing.experienceAttributes) {
+          const experience = listing.experienceAttributes as any;
+          experienceMatch = 
+            (experience.experienceType && experience.experienceType.toLowerCase().includes(searchTerm)) ||
+            (experience.languages && experience.languages.some((lang: string) => lang.toLowerCase().includes(searchTerm)));
+        }
+        
+        return titleMatch || descriptionMatch || districtMatch || cityMatch || vehicleMatch || propertyMatch || experienceMatch;
+      });
+    }
+
+    const response = NextResponse.json(filteredListings);
     
     // Add aggressive caching headers for better performance
     response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600, max-age=60');
