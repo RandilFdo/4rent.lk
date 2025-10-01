@@ -5,6 +5,7 @@ import { IconType } from "react-icons";
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
 import useShare from "@/app/hooks/useShare";
+import useAnalytics from "@/app/hooks/useAnalytics";
 
 interface ListingInfoProps {
    user: SafeUser;
@@ -34,6 +35,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
    listing,
 }) => {
    const { share } = useShare();
+   const { trackEvent } = useAnalytics();
    const formatPrice = (price: number) => {
       return new Intl.NumberFormat('en-LK', {
          style: 'currency',
@@ -80,6 +82,9 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                         };
 
                         const result = await share(shareData);
+                        
+                        // Track sharing event
+                        trackEvent('share', 'listing', listing.mainCategory, 1);
                         
                         // Show feedback based on the sharing method used
                         if (result.method === 'clipboard' || result.method === 'clipboard-fallback') {

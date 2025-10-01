@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SWRProvider from "./providers/SWRProvider";
 import PrefetchData from "./components/PrefetchData";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 
 // const inter = Inter({ subsets: ["latin"] });
 const nunito = Nunito({
@@ -25,7 +26,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-   metadataBase: new URL('https://4rent.lk'),
+   metadataBase: new URL('https://4rent-lk-66uy.vercel.app'),
    title: "4Rent - Sri Lanka's Premier Rental Marketplace",
    description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
    icons: {
@@ -52,6 +53,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
    return (
       <html lang="en">
          <head>
+            {/* Google Analytics */}
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-SY05YNLJ6D"></script>
+            <script
+               dangerouslySetInnerHTML={{
+                  __html: `
+                     window.dataLayer = window.dataLayer || [];
+                     function gtag(){dataLayer.push(arguments);}
+                     gtag('js', new Date());
+                     gtag('config', 'G-SY05YNLJ6D');
+                  `,
+               }}
+            />
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />
             <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
             <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
@@ -81,6 +94,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                <PrefetchData />
                </SWRProvider>
             </SessionProvider>
+            {/* Google Analytics */}
+            {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+               <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+            )}
          </body>
       </html>
    );
