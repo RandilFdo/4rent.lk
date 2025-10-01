@@ -13,12 +13,36 @@ import { MainCategory } from "./types";
 
 export const metadata: Metadata = {
   title: "4Rent - Sri Lanka's Premier Rental Marketplace",
-  description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
-  keywords: ["rent", "sri lanka", "vehicles", "properties", "cars", "bikes", "apartments"],
+  description: "Find and rent vehicles, properties, and experiences across Sri Lanka. Free platform for cars, bikes, apartments, houses, and unique experiences. No fees, no hidden costs.",
+  keywords: [
+    "rent", "sri lanka", "vehicles", "properties", "cars", "bikes", "apartments", 
+    "houses", "rental marketplace", "colombo", "kandy", "galle", "negombo",
+    "car rental sri lanka", "property rental", "apartment rent", "house rent",
+    "vehicle rental", "bike rental", "scooter rental", "free rental platform",
+    "sri lanka rental", "colombo rental", "kandy rental", "galle rental"
+  ],
   openGraph: {
     title: "4Rent - Sri Lanka's Premier Rental Marketplace",
-    description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
+    description: "Find and rent vehicles, properties, and experiences across Sri Lanka. Free platform for cars, bikes, apartments, houses, and unique experiences.",
     type: "website",
+    url: "https://4rent-lk-66uy.vercel.app",
+    images: [
+      {
+        url: "/images/white logo.png",
+        width: 1200,
+        height: 630,
+        alt: "4Rent Sri Lanka - Rental Marketplace",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "4Rent - Sri Lanka's Premier Rental Marketplace",
+    description: "Find and rent vehicles, properties, and experiences across Sri Lanka. Free platform for cars, bikes, apartments, houses, and unique experiences.",
+    images: ["/images/white logo.png"],
+  },
+  alternates: {
+    canonical: "https://4rent-lk-66uy.vercel.app",
   },
 };
 

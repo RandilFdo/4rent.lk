@@ -27,8 +27,25 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
    metadataBase: new URL('https://4rent-lk-66uy.vercel.app'),
-   title: "4Rent - Sri Lanka's Premier Rental Marketplace",
-   description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
+   title: {
+      default: "4Rent - Sri Lanka's Premier Rental Marketplace",
+      template: "%s | 4Rent Sri Lanka"
+   },
+   description: "Find and rent vehicles, properties, and experiences across Sri Lanka. Free platform for cars, bikes, apartments, houses, and unique experiences. No fees, no hidden costs.",
+   keywords: [
+      "rent", "sri lanka", "vehicles", "properties", "cars", "bikes", "apartments", 
+      "houses", "rental marketplace", "colombo", "kandy", "galle", "negombo",
+      "car rental sri lanka", "property rental", "apartment rent", "house rent",
+      "vehicle rental", "bike rental", "scooter rental", "free rental platform"
+   ],
+   authors: [{ name: "4Rent Sri Lanka" }],
+   creator: "4Rent Sri Lanka",
+   publisher: "4Rent Sri Lanka",
+   formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+   },
    icons: {
      icon: [
        { url: '/favicon.ico', sizes: 'any' },
@@ -39,12 +56,42 @@ export const metadata: Metadata = {
      apple: '/favicon-64x64.png',
    },
    viewport: 'width=device-width, initial-scale=1',
-   robots: 'index, follow',
+   robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+         index: true,
+         follow: true,
+         'max-video-preview': -1,
+         'max-image-preview': 'large',
+         'max-snippet': -1,
+      },
+   },
    openGraph: {
      title: "4Rent - Sri Lanka's Premier Rental Marketplace",
-     description: "Find and rent vehicles and properties across Sri Lanka. Cars, bikes, apartments, houses and more.",
-     type: 'website',
+     description: "Find and rent vehicles, properties, and experiences across Sri Lanka. Free platform for cars, bikes, apartments, houses, and unique experiences.",
+     url: 'https://4rent-lk-66uy.vercel.app',
+     siteName: '4Rent Sri Lanka',
+     images: [
+       {
+         url: '/images/white logo.png',
+         width: 1200,
+         height: 630,
+         alt: '4Rent Sri Lanka - Rental Marketplace',
+       },
+     ],
      locale: 'en_US',
+     type: 'website',
+   },
+   twitter: {
+     card: 'summary_large_image',
+     title: "4Rent - Sri Lanka's Premier Rental Marketplace",
+     description: "Find and rent vehicles, properties, and experiences across Sri Lanka. Free platform for cars, bikes, apartments, houses, and unique experiences.",
+     images: ['/images/white logo.png'],
+     creator: '@4RentSriLanka',
+   },
+   alternates: {
+     canonical: 'https://4rent-lk-66uy.vercel.app',
    },
 };
 
@@ -63,6 +110,38 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                      gtag('js', new Date());
                      gtag('config', 'G-SY05YNLJ6D');
                   `,
+               }}
+            />
+            {/* Structured Data */}
+            <script
+               type="application/ld+json"
+               dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                     "@context": "https://schema.org",
+                     "@type": "WebSite",
+                     "name": "4Rent Sri Lanka",
+                     "description": "Sri Lanka's premier rental marketplace for vehicles, properties, and experiences",
+                     "url": "https://4rent-lk-66uy.vercel.app",
+                     "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": "https://4rent-lk-66uy.vercel.app/?search={search_term_string}",
+                        "query-input": "required name=search_term_string"
+                     },
+                     "publisher": {
+                        "@type": "Organization",
+                        "name": "4Rent Sri Lanka",
+                        "url": "https://4rent-lk-66uy.vercel.app",
+                        "logo": {
+                           "@type": "ImageObject",
+                           "url": "https://4rent-lk-66uy.vercel.app/images/white logo.png"
+                        }
+                     },
+                     "sameAs": [
+                        "https://facebook.com/4RentSriLanka",
+                        "https://twitter.com/4RentSriLanka",
+                        "https://instagram.com/4RentSriLanka"
+                     ]
+                  })
                }}
             />
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />
