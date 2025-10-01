@@ -33,7 +33,6 @@ export const metadata: Metadata = {
        { url: '/favicon.ico', sizes: 'any' },
        { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
        { url: '/favicon-64x64.png', sizes: '64x64', type: 'image/png' },
-       { url: '/images/tablogo.png', type: 'image/png' },
      ],
      shortcut: '/favicon-64x64.png',
      apple: '/favicon-64x64.png',
@@ -56,7 +55,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <link rel="icon" type="image/x-icon" href="/favicon.ico" />
             <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
             <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64x64.png" />
-            <link rel="icon" type="image/png" href="/images/tablogo.png" />
             <link rel="apple-touch-icon" sizes="64x64" href="/favicon-64x64.png" />
             <link rel="preload" href="/images/black logo.png" as="image" type="image/png" />
             <link rel="preload" href="/images/white logo.png" as="image" type="image/png" />

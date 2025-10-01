@@ -45,7 +45,30 @@ const nextConfig = {
       NEXTAUTH_URL: process.env.NEXTAUTH_URL,
       NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
       DATABASE_URL: process.env.DATABASE_URL,
-   }
+   },
+   // Headers for better favicon serving
+   async headers() {
+      return [
+         {
+            source: '/favicon.ico',
+            headers: [
+               {
+                  key: 'Cache-Control',
+                  value: 'public, max-age=31536000, immutable',
+               },
+            ],
+         },
+         {
+            source: '/favicon-:size.png',
+            headers: [
+               {
+                  key: 'Cache-Control',
+                  value: 'public, max-age=31536000, immutable',
+               },
+            ],
+         },
+      ];
+   },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);

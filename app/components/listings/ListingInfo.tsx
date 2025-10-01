@@ -4,6 +4,7 @@ import { SafeUser, SafeListing } from "@/app/types";
 import { IconType } from "react-icons";
 import Avatar from "../Avatar";
 import ListingCategory from "./ListingCategory";
+import useShare from "@/app/hooks/useShare";
 
 interface ListingInfoProps {
    user: SafeUser;
@@ -32,6 +33,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
    locationValue,
    listing,
 }) => {
+   const { share } = useShare();
    const formatPrice = (price: number) => {
       return new Intl.NumberFormat('en-LK', {
          style: 'currency',
@@ -70,13 +72,29 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
                </div>
                <div className="flex gap-2">
                   <button 
-                     onClick={() => {
-                        navigator.clipboard.writeText(window.location.href);
-                        // You can add a toast notification here if you want
-                        alert('Link copied to clipboard!');
+                     onClick={async () => {
+                        const shareData = {
+                           title: listing.title,
+                           text: `Check out this ${listing.mainCategory?.toLowerCase() || 'listing'} on 4Rent: ${listing.title}`,
+                           url: window.location.href,
+                        };
+
+                        const result = await share(shareData);
+                        
+                        // Show feedback based on the sharing method used
+                        if (result.method === 'clipboard' || result.method === 'clipboard-fallback') {
+                           alert('Link copied to clipboard!');
+                        } else if (result.method === 'cancelled') {
+                           // User cancelled, no need to show anything
+                        } else if (!result.success) {
+                           alert('Unable to share. Please copy the link manually.');
+                        }
                      }}
-                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
+                     className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300 flex items-center gap-2"
                   >
+                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                     </svg>
                      Share
                   </button>
                </div>
