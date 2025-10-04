@@ -29,12 +29,6 @@ const nextConfig = {
             tls: false,
          };
       }
-      
-      // Copy Prisma schema to build output
-      if (isServer) {
-         config.externals.push('@prisma/client');
-      }
-      
       return config;
    },
    // Production optimizations
@@ -45,6 +39,24 @@ const nextConfig = {
    swcMinify: true,
    experimental: {
       serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
+   },
+   // Copy Prisma schema to build output
+   webpack: (config, { isServer }) => {
+      if (!isServer) {
+         config.resolve.fallback = {
+            ...config.resolve.fallback,
+            fs: false,
+            net: false,
+            tls: false,
+         };
+      }
+      
+      // Copy Prisma schema to build output
+      if (isServer) {
+         config.externals.push('@prisma/client');
+      }
+      
+      return config;
    },
    // Environment variables for build time
    env: {
