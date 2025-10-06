@@ -30,8 +30,14 @@ export async function GET() {
       console.error('❌ Prisma: Query failed:', queryError);
     }
 
-    // Test schema access (already tested above)
-    clientInfo.schemaLoaded = clientInfo.canQuery;
+    // Test schema access
+    try {
+      await prisma.user.findFirst();
+      clientInfo.schemaLoaded = true;
+      console.log('✅ Prisma: Schema loaded successfully');
+    } catch (schemaError) {
+      console.error('❌ Prisma: Schema access failed:', schemaError);
+    }
 
     const prismaCheck = {
       success: clientInfo.isConnected && clientInfo.canQuery && clientInfo.schemaLoaded,

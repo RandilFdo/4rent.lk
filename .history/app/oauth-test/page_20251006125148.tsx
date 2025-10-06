@@ -94,7 +94,7 @@ export default function OAuthTest() {
             
             <div className="p-3 bg-green-50 border-l-4 border-green-400">
               <h3 className="font-semibold text-green-800">Expected NEXTAUTH_URL:</h3>
-              <code className="text-green-700">{typeof window !== 'undefined' ? window.location.origin : 'Loading...'}</code>
+              <code className="text-green-700">{window.location.origin}</code>
             </div>
           </div>
         </div>
