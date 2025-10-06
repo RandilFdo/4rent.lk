@@ -56,7 +56,7 @@ export default function TestOAuthSimple() {
         <div className="text-center">
           <div className="text-green-500 text-6xl mb-4">✅</div>
           <h1 className="text-2xl font-bold mb-4">Signed In Successfully!</h1>
-          <p className="mb-4">Welcome, {session.user?.name || session.user?.email}</p>
+          <p className="mb-4">Welcome, {(session as any).user?.name || (session as any).user?.email}</p>
           <p className="text-sm text-gray-600">Redirecting to {callbackUrl}...</p>
         </div>
       </div>
@@ -76,7 +76,7 @@ export default function TestOAuthSimple() {
           <ul className="text-sm space-y-1">
             <li>Session: {status}</li>
             <li>Callback URL: {callbackUrl}</li>
-            <li>User: {session?.user?.name || 'Not signed in'}</li>
+            <li>User: {(session as any)?.user?.name || 'Not signed in'}</li>
           </ul>
         </div>
 
