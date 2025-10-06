@@ -94,7 +94,7 @@ export default function TestEnv() {
           ) : null}
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">OAuth Test</h2>
           <div className="space-y-4">
             <button
@@ -111,34 +111,6 @@ export default function TestEnv() {
                 <li>Environment variables are set for the correct environment</li>
                 <li>Domain matches between NEXTAUTH_URL and Google Console</li>
               </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Direct API Tests</h2>
-          <div className="space-y-4">
-            <button
-              onClick={() => window.open('/api/test-auth', '_blank')}
-              className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 mr-2"
-            >
-              Test Auth API
-            </button>
-            <button
-              onClick={() => window.open('/api/auth/providers', '_blank')}
-              className="bg-purple-500 text-white px-6 py-2 rounded hover:bg-purple-600 mr-2"
-            >
-              Test Providers API
-            </button>
-            <button
-              onClick={() => window.open('/api/debug/env', '_blank')}
-              className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600"
-            >
-              Test Environment API
-            </button>
-            
-            <div className="text-sm text-gray-600 mt-4">
-              <p>Click these buttons to test the APIs directly and see what's happening.</p>
             </div>
           </div>
         </div>
