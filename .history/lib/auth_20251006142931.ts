@@ -75,6 +75,4 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  // Explicitly set the URL
-  ...(process.env.NEXTAUTH_URL && { url: process.env.NEXTAUTH_URL }),
 };
