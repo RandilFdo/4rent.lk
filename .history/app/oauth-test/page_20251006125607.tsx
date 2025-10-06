@@ -1,11 +1,19 @@
 "use client";
 
 import { signIn, getSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// Force client-side rendering only
+export const dynamic = 'force-dynamic';
 
 export default function OAuthTest() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const testGoogleAuth = async () => {
     setLoading(true);
@@ -44,6 +52,17 @@ export default function OAuthTest() {
     setResult({ session });
     console.log("Current session:", session);
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading OAuth Test...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-8 bg-gray-50">
