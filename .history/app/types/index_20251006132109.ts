@@ -1,4 +1,70 @@
-// Client-side types (no Prisma imports)
+// Removed Prisma imports to prevent client-side bundling issues
+
+// Define Prisma types manually to avoid client-side bundling
+export interface Listing {
+  id: string;
+  title: string;
+  description: string;
+  imageSrc: string;
+  images: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  category: string;
+  roomCount: number;
+  bathroomCount: number;
+  guestCount: number;
+  locationValue: string;
+  userId: string;
+  price: number;
+  mainCategory: string;
+  subCategory: string;
+  district: string;
+  city: string;
+  address?: string;
+  priceUnit: string;
+  status: string;
+  expiresAt?: Date;
+  lastRenewedAt?: Date;
+  whatsappNumber?: string;
+  contactPhone: string;
+  isNegotiable: boolean;
+  adminNotes?: string;
+  viewCount: number;
+  vehicleAttributes?: any;
+  propertyAttributes?: any;
+  experienceAttributes?: any;
+  user?: User;
+  reservations?: Reservation[];
+}
+
+export interface Reservation {
+  id: string;
+  userId: string;
+  listingId: string;
+  startDate: Date;
+  endDate: Date;
+  totalPrice: number;
+  createdAt: Date;
+  listing: Listing;
+  user: User;
+}
+
+export interface User {
+  id: string;
+  name: string | null;
+  email: string | null;
+  emailVerified: Date | null;
+  image: string | null;
+  hashedPassword: string | null;
+  phoneNumber: string | null;
+  whatsappNumber: string | null;
+  isAdmin: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  favoriteIds: string[];
+  listings?: Listing[];
+  reservations?: Reservation[];
+}
 
 // Main categories
 export type MainCategory = "VEHICLE" | "PROPERTY" | "EXPERIENCE";
@@ -71,68 +137,27 @@ export type SriLankanDistrict =
   | "KURUNEGALA" | "PUTTALAM" | "ANURADHAPURA" | "POLONNARUWA"
   | "BADULLA" | "MONARAGALA" | "RATNAPURA" | "KEGALLE";
 
-// Client-side safe types (with string dates)
-export interface SafeListing {
-  id: string;
-  title: string;
-  description: string;
-  imageSrc: string;
-  images: string[];
-  createdAt: string;
-  updatedAt: string;
-  category: string;
-  roomCount: number;
-  bathroomCount: number;
-  guestCount: number;
-  locationValue: string;
-  userId: string;
-  price: number;
-  mainCategory: string;
-  subCategory: string;
-  district: string;
-  city: string;
-  address?: string;
-  priceUnit: string;
-  status: string;
-  expiresAt?: string;
-  lastRenewedAt?: string;
-  whatsappNumber?: string;
-  contactPhone: string;
-  isNegotiable: boolean;
-  adminNotes?: string;
-  viewCount: number;
-  vehicleAttributes?: VehicleAttributes;
-  propertyAttributes?: PropertyAttributes;
-  experienceAttributes?: ExperienceAttributes;
-  user?: SafeUser;
-  reservations?: SafeReservation[];
-}
+export type SafeListing = Omit<Listing, "createdAt" | "updatedAt" | "expiresAt" | "lastRenewedAt"> & {
+   createdAt: string;
+   updatedAt: string;
+   expiresAt?: string;
+   lastRenewedAt?: string;
+   vehicleAttributes?: VehicleAttributes;
+   propertyAttributes?: PropertyAttributes;
+   experienceAttributes?: ExperienceAttributes;
+};
 
-export interface SafeReservation {
-  id: string;
-  userId: string;
-  listingId: string;
-  startDate: string;
-  endDate: string;
-  totalPrice: number;
-  createdAt: string;
-  listing: SafeListing;
-  user: SafeUser;
-}
+export type SafeReservation = Omit<
+   Reservation,
+   "createdAt" | "startDate" | "endDate" | "listing"
+> & {
+   createdAt: string;
+   startDate: string;
+   endDate: string;
+   listing: SafeListing;
+};
 
-export interface SafeUser {
-  id: string;
-  name: string | null;
-  email: string | null;
-  emailVerified: string | null;
-  image: string | null;
-  hashedPassword: string | null;
-  phoneNumber: string | null;
-  whatsappNumber: string | null;
-  isAdmin: boolean;
-  createdAt: string;
-  updatedAt: string;
-  favoriteIds: string[];
-  listings?: SafeListing[];
-  reservations?: SafeReservation[];
-}
+export type SafeUser = Omit<User, "createdAt" | "updatedAt" | "emailVerified"> & {
+   createdAt: string;
+   updatedAt: string;
+};
