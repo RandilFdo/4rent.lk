@@ -14,10 +14,10 @@ export default function TestOAuthDirect() {
       // Test the OAuth endpoint directly first
       setStatus('Testing OAuth endpoint...');
       const testResponse = await fetch('/api/auth/providers');
-      const providers = await testResponse.json();
-      console.log('Available providers:', providers);
+      const providersData = await testResponse.json();
+      console.log('Available providers:', providersData);
       
-      if (!providers.google) {
+      if (!providersData.providers?.google) {
         setStatus('❌ Google provider not available');
         setIsLoading(false);
         return;
