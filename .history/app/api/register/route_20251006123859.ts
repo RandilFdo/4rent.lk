@@ -9,10 +9,15 @@ export async function POST(request: Request) {
       const hashedPassword = await bcrypt.hash(password, 12);
 
       try {
-         // Temporarily disabled due to Prisma build issues
-         // TODO: Re-enable after fixing Prisma client generation
-         console.log('Database connection temporarily disabled for deployment');
-         throw new Error('Prisma temporarily disabled');
+         const user = await prisma.user.create({
+            data: {
+               email,
+               name,
+               hashedPassword,
+            },
+         });
+
+         return NextResponse.json(user);
       } catch (dbError) {
          // If database is down, return demo user data
          console.log('Database connection failed, returning demo user for registration');
