@@ -20,6 +20,14 @@ export async function GET() {
         value: process.env.NEXTAUTH_SECRET ? 'Set' : 'Missing',
         status: process.env.NEXTAUTH_SECRET ? 'Set' : 'Missing'
       },
+      GITHUB_ID: {
+        value: process.env.GITHUB_ID ? 'Set' : 'Missing',
+        status: process.env.GITHUB_ID ? 'Set' : 'Missing'
+      },
+      GITHUB_SECRET: {
+        value: process.env.GITHUB_SECRET ? 'Set' : 'Missing',
+        status: process.env.GITHUB_SECRET ? 'Set' : 'Missing'
+      },
       DATABASE_URL: {
         value: process.env.DATABASE_URL ? 'Set' : 'Missing',
         status: process.env.DATABASE_URL ? 'Set' : 'Missing'

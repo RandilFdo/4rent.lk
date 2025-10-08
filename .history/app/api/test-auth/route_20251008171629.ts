@@ -9,6 +9,8 @@ export async function GET() {
         NEXTAUTH_URL: process.env.NEXTAUTH_URL ? '✅ Set' : '❌ Missing',
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? '✅ Set' : '❌ Missing',
         DATABASE_URL: process.env.DATABASE_URL ? '✅ Set' : '❌ Missing',
+        GITHUB_ID: process.env.GITHUB_ID ? '✅ Set' : '❌ Missing',
+        GITHUB_SECRET: process.env.GITHUB_SECRET ? '✅ Set' : '❌ Missing',
       },
       timestamp: new Date().toISOString(),
       // Test if we can access the auth options
