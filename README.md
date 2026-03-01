@@ -17,7 +17,7 @@ A comprehensive rental platform built with Next.js 13, featuring property and ve
 ### 🚗 Vehicle Rentals
 - **Car4Rent** - Cars, SUVs, Vans
 - **Bike4Rent** - Motorcycles, Scooters
-- **Three Wheeler4Rent** - Tuk-tuks, Three wheelers
+- **Three Wheeler4Rent** - Tuk-tuks
 - **Bus4Rent** - Buses, Coaches
 - **Truck4Rent** - Trucks, Lorries
 - **Luxury Vehicle4Rent** - Premium cars, Luxury SUVs
@@ -216,3 +216,4 @@ For support, email support@4rent.lk or create an issue in the repository.
 "# 4rent.lk" 
 "# 4rent.lk" 
 "# 4rent.lk" 
+
