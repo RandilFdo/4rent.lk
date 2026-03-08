@@ -10,10 +10,7 @@ import { toast } from "react-hot-toast";
 import Button from "../Button";
 import { signIn } from "next-auth/react";
 import useLoginModal from "@/app/hooks/useLoginModal";
-<<<<<<< HEAD
 import { FcGoogle } from "react-icons/fc";
-=======
->>>>>>> 3c562109e0e46019af7fc625ace1fdb6a448871b
 
 const RegisterModal = () => {
    const registerModal = useRegisterModal();
@@ -47,16 +44,15 @@ const RegisterModal = () => {
                if (callback?.ok) {
                   registerModal.onClose();
                   toast.success("Successfully registered and logged in!");
-                  window.location.reload(); // Refresh to update the UI
+                  window.location.reload();
                } else {
-                  // If auto-login fails, show login modal
                   registerModal.onClose();
                   loginModal.onOpen();
                   toast.success("Successfully registered! Please log in.");
                }
             });
          })
-         .catch((error) => {
+         .catch(() => {
             toast.error("Something Went Wrong");
          })
          .finally(() => {
@@ -104,8 +100,7 @@ const RegisterModal = () => {
    );
 
    const footerContent = (
-      <div className="flex flex-col gap-4 mt-6">
-<<<<<<< HEAD
+      <div className="flex flex-col gap-4 mt-2">
          <hr />
          <Button
             outline
@@ -113,13 +108,12 @@ const RegisterModal = () => {
             icon={FcGoogle}
             onClick={() => signIn("google")}
          />
-=======
->>>>>>> 3c562109e0e46019af7fc625ace1fdb6a448871b
-         <div className="text-center mt-4">
+         <div className="text-center mt-2">
             <span className="text-gray-600 dark:text-gray-400">Already have an account? </span>
             <button
                className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
                onClick={onToggle}
+               type="button"
             >
                Log in
             </button>
