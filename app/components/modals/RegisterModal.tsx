@@ -42,9 +42,8 @@ const RegisterModal = () => {
                redirect: false,
             }).then((callback) => {
                if (callback?.ok) {
-                  registerModal.onClose();
                   toast.success("Successfully registered and logged in!");
-                  window.location.reload();
+                  window.location.href = "/";
                } else {
                   registerModal.onClose();
                   loginModal.onOpen();

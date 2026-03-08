@@ -40,8 +40,7 @@ const LoginModal = () => {
 
       if (result?.ok) {
         toast.success("Logged in successfully!");
-        router.refresh();
-        loginModal.onClose();
+        window.location.href = "/";
       } else {
         toast.error(result?.error || "Invalid email or password.");
       }

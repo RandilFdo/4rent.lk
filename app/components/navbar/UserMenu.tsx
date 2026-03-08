@@ -5,7 +5,7 @@ import { useCallback, useState, useRef, useEffect } from "react";
 import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { SafeUser } from "@/app/types/client";
 import useRentModal from "@/app/hooks/useRentModal";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,12 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
    const [isOpen, setIsOpen] = useState(false);
    const menuRef = useRef<HTMLDivElement>(null);
+
+   // Use client-side session to reactively update the menu after login/logout
+   const { data: session, status } = useSession();
+   // isLoggedIn is true if either the server-side currentUser OR the client-side session is active
+   const isLoggedIn = !!(currentUser || (session?.user && status === "authenticated"));
+   const displayUser = currentUser || session?.user;
 
    const registerModal = useRegisterModal();
    const loginModal = useLoginModal();
@@ -72,7 +78,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
             >
                <AiOutlineMenu className="text-sm sm:text-base text-gray-700 dark:text-white" />
                <div className="hidden md:block">
-                  <Avatar src={currentUser?.image} />
+                  <Avatar src={displayUser?.image} />
                </div>
             </div>
          </div>
@@ -98,7 +104,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
                      </>
                   )}
 
-                  {currentUser ? (
+                  {isLoggedIn ? (
                      <>
                         <MenuItem
                            onClick={() => {
