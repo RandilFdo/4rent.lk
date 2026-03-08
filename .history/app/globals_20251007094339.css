@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+:root {
+   height: 100%;
+   margin: 0;
+   padding: 0;
+}
+
+/* Custom gradient theme */
+:root {
+   --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+   --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+   --gradient-purple-blue: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+   --gradient-purple-blue-hover: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+}
+
+/* Simple transitions for interactive elements only */
+button, .card-hover, .hover-scale {
+   transition: all 0.2s ease;
+}
+
+/* Custom gradient utilities */
+.gradient-primary {
+   background: var(--gradient-purple-blue);
+}
+
+.gradient-primary-hover:hover {
+   background: var(--gradient-purple-blue-hover);
+   transform: translateY(-2px);
+   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.gradient-text {
+   background: var(--gradient-purple-blue);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+}
+
+/* Simple button styling */
+.btn-gradient {
+   background: var(--gradient-purple-blue);
+}
+
+.btn-gradient:hover {
+   background: var(--gradient-purple-blue-hover);
+   transform: translateY(-1px);
+   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Simple card hover effects */
+.card-hover:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Simple hover scale effect */
+.hover-scale:hover {
+   transform: scale(1.02);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+   width: 8px;
+}
+
+::-webkit-scrollbar-track {
+   background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+   background: var(--gradient-purple-blue);
+   border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+   background: var(--gradient-purple-blue-hover);
+}
+
+.leaflet-bottom,
+.leaflet-control,
+.leaflet-pane,
+.leaflet-top {
+   z-index: 0 !important;
+}
+
+.rdrMonth {
+   width: 100% !important;
+}
+
+.rdrCalendarWrapper {
+   font-size: 16px !important;
+   width: 100% !important;
+}

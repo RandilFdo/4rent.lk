@@ -1,0 +1,152 @@
+"use client";
+import { AiOutlineMenu } from "@react-icons/all-files/ai/AiOutlineMenu";
+import Avatar from "../Avatar";
+import { useCallback, useState, useRef, useEffect } from "react";
+import MenuItem from "./MenuItem";
+import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
+import { signOut } from "next-auth/react";
+import { SafeUser } from "@/app/types/client";
+import useRentModal from "@/app/hooks/useRentModal";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import useDarkMode from "@/app/hooks/useDarkMode";
+
+interface UserMenuProps {
+   currentUser?: SafeUser | null;
+   navItems?: Array<{ label: string; href: string; icon: string }>;
+}
+
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser, navItems = [] }) => {
+   const [isOpen, setIsOpen] = useState(false);
+   const menuRef = useRef<HTMLDivElement>(null);
+
+   const registerModal = useRegisterModal();
+   const loginModal = useLoginModal();
+   const rentModal = useRentModal();
+   const router = useRouter();
+   const { isDarkMode, toggleDarkMode } = useDarkMode();
+
+   const toogleOpen = useCallback(() => {
+      setIsOpen((value) => !value);
+   }, []);
+
+   // Close dropdown when clicking outside
+   useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+         }
+      };
+
+      if (isOpen) {
+         document.addEventListener('mousedown', handleClickOutside);
+      }
+
+      return () => {
+         document.removeEventListener('mousedown', handleClickOutside);
+      };
+   }, [isOpen]);
+
+   const onRent = useCallback(() => {
+      if (!currentUser) {
+         return loginModal.onOpen();
+      }
+
+      // Navigate to posting page
+      router.push('/post');
+   }, [currentUser, loginModal, router]);
+   return (
+      <div className="relative" ref={menuRef}>
+         <div className="flex flex-row items-center gap-2 sm:gap-3">
+                        <div
+                           onClick={onRent}
+                           className="hidden lg:block text-sm font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-full border-2 border-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition cursor-pointer"
+                        >
+                           Offer Something 4Rent
+                        </div>
+            <div
+               onClick={toogleOpen}
+               className="p-2 sm:p-3 md:py-2 md:px-3 border-[1px] border-neutral-200 dark:border-gray-600 flex flex-row items-center gap-2 sm:gap-3 rounded-full cursor-pointer hover:shadow-md transition"
+            >
+               <AiOutlineMenu className="text-sm sm:text-base text-gray-700 dark:text-white" />
+               <div className="hidden md:block">
+                  <Avatar src={currentUser?.image} />
+               </div>
+            </div>
+         </div>
+         {isOpen && (
+            <div className="absolute rounded-xl shadow-md w-[50vw] sm:w-[40vw] md:w-64 bg-white dark:bg-gray-800 overflow-hidden right-0 top-12 sm:top-14 text-sm">
+               <div className="flex flex-col cursor-pointer">
+                  {/* Mobile Navigation Items */}
+                  {navItems.length > 0 && (
+                     <>
+                        <div className="md:hidden border-b border-gray-200 dark:border-gray-700">
+                           {navItems.map((item) => (
+                              <Link
+                                 key={item.label}
+                                 href={item.href}
+                                 prefetch={true}
+                                 onClick={() => setIsOpen(false)}
+                                 className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                              >
+                                 {item.icon} {item.label}
+                              </Link>
+                           ))}
+                        </div>
+                     </>
+                  )}
+
+                  {currentUser ? (
+                     <>
+                        <MenuItem
+                           onClick={() => {
+                              router.push("/favorites");
+                              setIsOpen(false);
+                           }}
+                           label="My Favorites"
+                        />
+                        <MenuItem
+                           onClick={() => {
+                              router.push("/dashboard");
+                              setIsOpen(false);
+                           }}
+                           label="Dashboard"
+                        />
+                        <MenuItem onClick={() => { router.push('/post'); setIsOpen(false); }} label="Offer Something 4Rent" isSpecial={true} />
+                        <MenuItem
+                           onClick={() => {
+                              toggleDarkMode();
+                              setIsOpen(false);
+                           }}
+                           label={isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                        />
+                        <hr />
+                        <MenuItem
+                           onClick={() => {
+                              signOut();
+                           }}
+                           label="Logout"
+                        />
+                     </>
+                  ) : (
+                     <>
+                        <MenuItem onClick={loginModal.onOpen} label="Login" />
+                        <MenuItem onClick={registerModal.onOpen} label="Sign Up" />
+                        <hr />
+                        <MenuItem
+                           onClick={() => {
+                              toggleDarkMode();
+                              setIsOpen(false);
+                           }}
+                           label={isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                        />
+                     </>
+                  )}
+               </div>
+            </div>
+         )}
+      </div>
+   );
+};
+export default UserMenu;

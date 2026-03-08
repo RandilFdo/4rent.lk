@@ -1,0 +1,17 @@
+{
+  "buildCommand": "npx prisma generate && npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "build": {
+    "env": {
+      "PRISMA_GENERATE_DATAPROXY": "false",
+      "PRISMA_CLI_BINARY_TARGETS": "native"
+    }
+  }
+}
