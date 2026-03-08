@@ -10,7 +10,10 @@ import { toast } from "react-hot-toast";
 import Button from "../Button";
 import { signIn } from "next-auth/react";
 import useLoginModal from "@/app/hooks/useLoginModal";
+<<<<<<< HEAD
 import { FcGoogle } from "react-icons/fc";
+=======
+>>>>>>> 3c562109e0e46019af7fc625ace1fdb6a448871b
 
 const RegisterModal = () => {
    const registerModal = useRegisterModal();
@@ -102,6 +105,7 @@ const RegisterModal = () => {
 
    const footerContent = (
       <div className="flex flex-col gap-4 mt-6">
+<<<<<<< HEAD
          <hr />
          <Button
             outline
@@ -109,6 +113,8 @@ const RegisterModal = () => {
             icon={FcGoogle}
             onClick={() => signIn("google")}
          />
+=======
+>>>>>>> 3c562109e0e46019af7fc625ace1fdb6a448871b
          <div className="text-center mt-4">
             <span className="text-gray-600 dark:text-gray-400">Already have an account? </span>
             <button

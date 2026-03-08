@@ -92,6 +92,7 @@ const Modal: React.FC<ModalProps> = ({
                         </button>
                         <div className="text-base sm:text-lg font font-semibold text-gray-900 dark:text-white">{title}</div>
                      </div>
+<<<<<<< HEAD
                      {/* BODY & FOOTER */}
                      <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
                         <div className="relative p-4 sm:p-6 flex-auto">{body}</div>
@@ -110,6 +111,26 @@ const Modal: React.FC<ModalProps> = ({
                            {footer}
                         </div>
                      </form>
+=======
+                     {/* BODY */}
+                     <div className="relative p-4 sm:p-6 flex-auto">{body}</div>
+                     {/* FOOTER */}
+                     <div className="flex flex-col gap-2 p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full">
+                           {secondaryAction && secondaryActionLabel && (
+                              <Button
+                                 outline
+                                 disabled={disabled}
+                                 label={secondaryActionLabel}
+                                 onClick={handleSecondayAction}
+                              />
+                           )}
+
+                           <Button disabled={disabled} label={actionLabel} onClick={handleSubmit} />
+                        </div>
+                        {footer}
+                     </div>
+>>>>>>> 3c562109e0e46019af7fc625ace1fdb6a448871b
                   </div>
                </div>
             </div>
